@@ -2,20 +2,24 @@ require "curb"
 require "json"
 
 class Twitch
-	def initialize
-		@client_id = "k96gsxbp95dgpv9ck8wnzqcyhifqxv5"
-		@secret_key = "9is2azmi3iw5r29ay7d8gvl4u4feeyg"
-		@redirect_uri = "http://localhost:3000/auth"
-		@scope = ["user_red", "channel_read"]
+	def initialize(options = {})
+		@client_id = options[:client_id] || nil
+		@secret_key = options[:secret_key] || nil
+		@redirect_uri = options[:redirect_uri] || nil
+		@scope = options[:scope] || nil
+		@access_token = options[:access_token] || nil
 
 		@base_url = "https://api.twitch.tv/kraken"
-		@access_token = nil
 	end
 
 	public
 
-	def setAccessToken(token)
-		@access_token = token
+	def setTestingDefaults
+		@client_id = "k96gsxbp95dgpv9ck8wnzqcyhifqxv5"
+		@secret_key = "9is2azmi3iw5r29ay7d8gvl4u4feeyg"
+		@redirect_uri = "http://localhost:3000/auth"
+		@scope = ["user_red", "channel_read", "channel_editor", "channel_commercial", "channel_stream", "user_blocks_edit"]
+		@access_token = "1d6lcvunb152ccoxlzuxesh7u337m2a"
 	end
 
 	def getLink
@@ -38,8 +42,6 @@ class Twitch
 		})
 	end
 
-
-
 	# USER
 
 	def getUser(user)
@@ -50,7 +52,7 @@ class Twitch
 
 	def getYourUser
 		return false if !@access_token
-		path = "/user?oauth_token=" + @access_token
+		path = "/user?oauth_token=#{@access_token}"
 		url = @base_url + path
 		get(url)
 	end
@@ -67,8 +69,8 @@ class Twitch
 
 
 	def getTeam(team_id)
-		path = "/team/"
-		url = @base_url + path;
+		path = "/teams/"
+		url = @base_url + path + team_id;
 		get(url)
 	end
 
@@ -84,19 +86,44 @@ class Twitch
 
 	def getYourChannel
 		return false if !@access_token
-		path = "/channel/"
+		path = "/channel?oauth_token=#{@access_token}"
 		url = @base_url + path;
 		get(url)
+	end
+
+	def editChannel(status, game)
+		path = "/channels/dustinlakin/?oauth_token=#{@access_token}"
+		url = @base_url + path
+		data = {
+			:channel =>{
+				:game => game,
+				:status => status
+			}
+		}
+		put(url, data)
 	end
 
 	private
 
 	def post(url, data)
 		JSON.parse(Curl.post(url, data).body_str)
+		c = Curl.post(url, data)
+		{:body => JSON.parse(c.body_str), :response => c.response_code}
 	end
 
 	def get(url)
-		JSON.parse(Curl.get(url).body_str)
+		c = Curl.get(url)
+		{:body => JSON.parse(c.body_str), :response => c.response_code}
 	end
+
+	def put(url, data)
+		c = Curl.put(url,data.to_json) do |curl|
+			curl.headers['Accept'] = 'application/json'      
+			curl.headers['Content-Type'] = 'application/json'      
+			curl.headers['Api-Version'] = '2.2'      
+			end
+		{:body => JSON.parse(c.body_str), :response => c.response_code}
+	end
+
 
 end
