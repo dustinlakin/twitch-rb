@@ -66,7 +66,46 @@ describe Twitch do
 
 	it 'should edit your channel' do
 		@t = Twitch.new({:access_token => @access_token})
-		@t.editChannel("testing api", "Diablo III")[:response].should == 200
+		@t.editChannel("Changing API", "Diablo III")[:response].should == 200
 	end
+
+	# it 'should run a comercial on your channel' do
+	# 	@t = Twitch.new({:access_token => @access_token})
+	# 	@t.runCommercial("dustinlakin")[:response].should == 204
+	# end
+
+	it 'should get a single user stream' do
+		@t = Twitch.new()
+		@t.getStream("nasltv")[:response].should == 200
+	end
+
+	it 'should get all streams' do
+		@t = Twitch.new()
+		@t.getStreams()[:response].should == 200
+	end
+
+	it 'should get League of Legends streams with +' do
+		@t = Twitch.new()
+		@t.getStreams({:game => "League+of+Legends"})[:response].should == 200
+	end
+
+	it 'should get League of Legends streams with spaces' do
+		@t = Twitch.new()
+		@t.getStreams({:game => "League of Legends"})[:response].should == 200
+	end
+
+	it 'should get featured streams' do
+		@t = Twitch.new()
+		res = @t.getFeaturedStreams()
+		res[:response].should == 200 && res[:body]["featured"].length.should == 25
+	end
+
+	it 'should get featured streams' do
+		@t = Twitch.new()
+		res = @t.getFeaturedStreams({:limit => 100})
+		res[:response].should == 200 && res[:body]["featured"].length.should > 25
+	end
+
+
 
 end
