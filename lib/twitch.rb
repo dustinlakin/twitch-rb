@@ -14,14 +14,6 @@ class Twitch
 
 	public
 
-	def setTestingDefaults
-		@client_id = "k96gsxbp95dgpv9ck8wnzqcyhifqxv5"
-		@secret_key = "9is2azmi3iw5r29ay7d8gvl4u4feeyg"
-		@redirect_uri = "http://localhost:3000/auth"
-		@scope = ["user_red", "channel_read", "channel_editor", "channel_commercial", "channel_stream", "user_blocks_edit"]
-		@access_token = "1d6lcvunb152ccoxlzuxesh7u337m2a"
-	end
-
 	def getLink
 		scope = ""
 		@scope.each do |s|

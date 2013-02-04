@@ -3,13 +3,13 @@ require 'spec_helper'
 describe Twitch do
 
 	before(:each) do
-		@client_id = "k96gsxbp95dgpv9ck8wnzqcyhifqxv5"
-		@secret_key = "9is2azmi3iw5r29ay7d8gvl4u4feeyg"
+		@client_id = ""
+		@secret_key = ""
 		@redirect_uri = "http://localhost:3000/auth"
 		@scope = ["user_red", "channel_read", "channel_editor", "channel_commercial", "channel_stream", "user_blocks_edit"]
 		@scope_str = ""
 		@scope.each{ |s| @scope_str += s + " " }
-		@access_token = "1d6lcvunb152ccoxlzuxesh7u337m2a"
+		@access_token = ""
 	end
 
 	it 'should build accurate link' do
