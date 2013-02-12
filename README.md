@@ -12,14 +12,16 @@ Install
 ----------------
 
 With Rails:
+
     #add to your Gemfile
-    gem 'twitch', '>= 0.0.2'
+    gem 'twitch', '= 0.0.2'
 
 
 Just irb or pry:
+
     $ gem install twitch
 
-    
+
     irb > require 'twitch'
     irb > @twitch = Twitch.new()
 
