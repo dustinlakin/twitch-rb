@@ -3,12 +3,25 @@ Twitch API
 
 This gem simplifies the Twitch-API for ruby users.
 
-Would love to see how you guys use it!
-
-http://lak.in // dustin@lak.in
 
 
+http://lak.in // http://twitter.com/dustinlakin
 
+
+Install
+----------------
+
+With Rails:
+    #add to your Gemfile
+    gem 'twitch', '>= 0.0.2'
+
+
+Just irb or pry:
+    $ gem install twitch
+
+    
+    irb > require 'twitch'
+    irb > @twitch = Twitch.new()
 
 
 Authorizing
