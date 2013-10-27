@@ -16,9 +16,7 @@ class Twitch
 
 	def getLink
 		scope = ""
-		@scope.each do |s|
-			scope += s + " "
-		end
+		@scope.map!{ |s| s + '+'}
 		link = "https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=#{@client_id}&redirect_uri=#{@redirect_uri}&scope=#{scope}"
 	end
 
@@ -206,9 +204,9 @@ class Twitch
 
 	def put(url, data)
 		c = Curl.put(url,data.to_json) do |curl|
-			curl.headers['Accept'] = 'application/json'      
-			curl.headers['Content-Type'] = 'application/json'      
-			curl.headers['Api-Version'] = '2.2'      
+			curl.headers['Accept'] = 'application/json'
+			curl.headers['Content-Type'] = 'application/json'
+			curl.headers['Api-Version'] = '2.2'
 			end
 		{:body => JSON.parse(c.body_str), :response => c.response_code}
 	end
