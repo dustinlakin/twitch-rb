@@ -3,21 +3,21 @@ require 'spec_helper'
 describe Twitch do
 
 	before(:each) do
-		@client_id = ""
-		@secret_key = ""
-		@redirect_uri = "http://localhost:3000/auth"
-		@scope = ["user_red", "channel_read", "channel_editor", "channel_commercial", "channel_stream", "user_blocks_edit"]
-		@scope_str = ""
-		@scope.each{ |s| @scope_str += s + " " }
-		@access_token = ""
-	end
+    @client_id = ""
+    @secret_key = ""
+    @redirect_uri = "http://localhost:3000/auth"
+    @scope = ["user_read", "channel_read", "channel_editor", "channel_commercial", "channel_stream", "user_blocks_edit"]
+    @scope_str = ""
+    @scope.each{ |s| @scope_str += s + "+" }
+    @access_token = ""
+  end
 
 	it 'should build accurate link' do
 		@t = Twitch.new({
 			:client_id => @client_id,
 			:secret_key => @secret_key,
 			:redirect_uri => @redirect_uri,
-			:scope => ["user_red", "channel_read", "channel_editor", "channel_commercial", "channel_stream", "user_blocks_edit"]
+			:scope => ["user_read", "channel_read", "channel_editor", "channel_commercial", "channel_stream", "user_blocks_edit"]
 			})
 		@t.getLink().should == "https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=#{@client_id}&redirect_uri=#{@redirect_uri}&scope=#{@scope_str}"
 	end
@@ -41,7 +41,6 @@ describe Twitch do
 		@t = Twitch.new()
 		@t.getYourUser().should == false
 	end
-
 
 	it 'should get all teams' do
 		@t = Twitch.new()
@@ -105,7 +104,5 @@ describe Twitch do
 		res = @t.getFeaturedStreams({:limit => 100})
 		res[:response].should == 200 && res[:body]["featured"].length.should > 25
 	end
-
-
 
 end
