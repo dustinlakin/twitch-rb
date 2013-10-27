@@ -16,7 +16,7 @@ class Twitch
 
 	def getLink
 		scope = ""
-		@scope.map!{ |s| s + '+'}
+		@scope.each { |s| scope += s + '+' }
 		link = "https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=#{@client_id}&redirect_uri=#{@redirect_uri}&scope=#{scope}"
 	end
 
