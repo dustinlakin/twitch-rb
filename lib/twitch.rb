@@ -90,6 +90,13 @@ class Twitch
 		put(url, data)
 	end
 
+  def followChannel(username, channel)
+    return false if !@access_token
+    path = "/users/#{username}/follows/channels/#{channel}?oauth_token=#{@access_token}"
+    url = @base_url + path
+    put(url)
+  end
+
 	def runCommercial(channel, length = 30)
 		return false if !@access_token
 		path = "/channels/#{channel}/commercial?oauth_token=#{@access_token}"
@@ -202,7 +209,7 @@ class Twitch
 		{:body => JSON.parse(c.body_str), :response => c.response_code}
 	end
 
-	def put(url, data)
+	def put(url, data={})
 		c = Curl.put(url,data.to_json) do |curl|
 			curl.headers['Accept'] = 'application/json'
 			curl.headers['Content-Type'] = 'application/json'
