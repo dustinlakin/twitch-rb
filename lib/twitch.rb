@@ -185,11 +185,16 @@ class Twitch
 		path = "/videos/#{video_id}/"
 		url = @base_url + path
 		get(url)
-	end
+  end
 
+  def isSubscribed(username, channel, options = {})
+    query = buildQueryString(options)
+    path = "/users/#{username}/subscriptions/#{channel}?oauth_token=#{@access_token}"
+    url = @base_url + path + query
+    get(url)
+  end
 
 	private
-
 	def buildQueryString(options)
 		query = "?"
 		options.each do |key, value|
