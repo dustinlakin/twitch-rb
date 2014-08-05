@@ -2,6 +2,6 @@ require 'rspec'
 require 'twitch'
 
 RSpec.configure do |config|
-  config.color_enabled = true
-  config.formatter     = 'documentation'
+  config.color = true
+  config.formatter = 'documentation'
 end
