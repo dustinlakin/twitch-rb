@@ -204,9 +204,11 @@ class Twitch
 	end
 
 	def post(url, data)
-		JSON.parse(Curl.post(url, data).body_str)
-		c = Curl.post(url, data)
-		{:body => JSON.parse(c.body_str), :response => c.response_code}
+		response_data = Curl.post(url, data)
+		{
+			:body => JSON.parse(response_data.body_str),
+			:response => response_data.response_code
+		}
 	end
 
 	def get(url)
