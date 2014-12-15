@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.files       = ["lib/twitch.rb"]
   s.require_paths = ["lib"]
   
-  s.add_dependency('curb')
+  s.add_dependency('httparty')
   s.add_dependency('json')
   s.add_development_dependency('rspec')
 end

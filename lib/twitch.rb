@@ -1,5 +1,4 @@
-require "curb"
-require "json"
+require "httparty"
 
 class Twitch
 	def initialize(options = {})
@@ -192,24 +191,24 @@ class Twitch
 	end
 
 	def post(url, data)
-		response_data = Curl.post(url, data)
+		response_data = HTTParty.post(url, :body => data)
 		{
-			:body => JSON.parse(response_data.body_str),
-			:response => response_data.response_code
+			:body => response_data,
+			:response => response_data.code
 		}
 	end
 
 	def get(url)
-		c = Curl.get(url)
-		{:body => JSON.parse(c.body_str), :response => c.response_code}
+		c = HTTParty.get(url)
+		{:body => c, :response => c.code}
 	end
 
 	def put(url, data)
-		c = Curl.put(url,data.to_json) do |curl|
-			curl.headers['Accept'] = 'application/json'
-			curl.headers['Content-Type'] = 'application/json'
-			curl.headers['Api-Version'] = '2.2'
-			end
-		{:body => JSON.parse(c.body_str), :response => c.response_code}
+		c = HTTParty.put(url, :body => data, :headers => {
+				'Accept' => 'application/json',
+				'Content-Type' => 'application/json',
+				'Api-Version' => '2.2'
+		})
+		{:body => c, :response => c.code}
 	end
 end
