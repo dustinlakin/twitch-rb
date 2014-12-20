@@ -215,7 +215,7 @@ class Twitch
 		{:body => c, :response => c.code}
 	end
 
-	def put(url, data)
+	def put(url, data={})
 		c = HTTParty.put(url, :body => data, :headers => {
 				'Accept' => 'application/json',
 				'Content-Type' => 'application/json',
