@@ -75,10 +75,18 @@ class Twitch
 		url = @base_url + path;
 		get(url)
 	end
+	
+	def getEditors(channel)
+	  return false if !@access_token
+		path = "/channels/#{channel}/editors?oauth_token=#{@access_token}"
+		url = @base_url + path;
+		get(url)
+	end
 
-	def editChannel(status, game)
+  # TODO: Add ability to set delay, which is only available for partered channels
+	def editChannel(channel, status, game)
 		return false if !@access_token
-		path = "/channels/dustinlakin/?oauth_token=#{@access_token}"
+		path = "/channels/#{channel}/?oauth_token=#{@access_token}"
 		url = @base_url + path
 		data = {
 			:channel =>{
@@ -88,12 +96,26 @@ class Twitch
 		}
 		put(url, data)
 	end
+	
+	def resetKey(channel)
+    return false if !@access_token
+    path = "/channels/#{channel}/stream_key?oauth_token=#{@access_token}"
+    url = @base_url + path
+    delete(url)
+  end
 
   def followChannel(username, channel)
     return false if !@access_token
     path = "/users/#{username}/follows/channels/#{channel}?oauth_token=#{@access_token}"
     url = @base_url + path
     put(url)
+  end
+  
+  def followChannel(username, channel)
+    return false if !@access_token
+    path = "/users/#{username}/follows/channels/#{channel}?oauth_token=#{@access_token}"
+    url = @base_url + path
+    delete(url)
   end
 
 	def runCommercial(channel, length = 30)
@@ -103,6 +125,13 @@ class Twitch
 		post(url, {
 			:length => length
 		})
+	end
+	
+	def getChannelTeams(channel)
+	  return false if !@access_token
+		path = "/channels/#{channel}/teams?oauth_token=#{@access_token}"
+		url = @base_url + path;
+		get(url)
 	end
 
 	# Streams
@@ -140,9 +169,11 @@ class Twitch
 		get(url)
 	end
 
-	def getYourFollowedStreams
+	def getYourFollowedStreams(options = {})
+	  return false if !@access_token
+    query = buildQueryString(options)
 		path = "/streams/followed?oauth_token=#{@access_token}"
-		url = @base_url + path
+		url = @base_url + path + query
 		get(url)
 	end
 
@@ -156,6 +187,13 @@ class Twitch
 	end
 
 	#Search
+	
+	def searchChannels(options = {})
+		query = buildQueryString(options)
+		path = "/search/channels"
+		url = @base_url + path + query
+		get(url)
+	end
 
 	def searchStreams(options = {})
 		query = buildQueryString(options)
@@ -192,6 +230,116 @@ class Twitch
     url = @base_url + path + query
     get(url)
   end
+  
+  def getYourFollowedVideos(options ={})
+    return false if !@access_token
+    query = buildQueryString(options)
+		path = "/videos/followed?oauth_token=#{@access_token}"
+		url = @base_url + path + query
+		get(url)
+	end
+	
+	def getTopVideos(options = {})
+		query = buildQueryString(options)
+		path = "/videos/top"
+		url = @base_url + path + query
+		get(url)
+	end
+  
+  # Blocks
+  
+  def getBlocks(username, options = {})
+    query = buildQueryString(options)
+    path = "/users/#{username}/blocks?oauth_token=#{@access_token}"
+    url = @base_url + path + query
+    get(url)
+  end
+  
+  def blockUser(username, target)
+    return false if !@access_token
+    path = "/users/#{username}/blocks/#{target}?oauth_token=#{@access_token}"
+    url = @base_url + path
+    put(url)
+  end
+  
+  def unblockUser(username, target)
+    return false if !@access_token
+    path = "/users/#{username}/blocks/#{target}?oauth_token=#{@access_token}"
+    url = @base_url + path
+    delete(url)
+  end
+  
+  # Chat
+  
+  def getChatLinks(channel)
+    path = "/chat/"
+		url = @base_url + path + channel;
+		get(url)
+  end
+  
+  def getBadges(channel)
+    path = "/chat/#{channel}/badges"
+		url = @base_url + path;
+		get(url)
+  end
+  
+  def getEmoticons()
+    path = "/chat/emoticons"
+		url = @base_url + path;
+		get(url)
+  end
+  
+  # Follows
+  
+  def getFollowing(channel)
+    path = "/channels/#{channel}/follows"
+		url = @base_url + path;
+		get(url)
+  end
+  
+  def getFollowed(username)
+    path = "/users/#{username}/follows/channels"
+		url = @base_url + path;
+		get(url)
+  end
+  
+  def getFollowStatus(username, channel)
+    path = "/users/#{username}/follows/channels/#{channel}/?oauth_token=#{@access_token}"
+		url = @base_url + path;
+		get(url)
+  end
+  
+  # Ingests
+  
+  def getIngests()
+		path = "/ingests"
+		url = @base_url + path
+		get(url)
+	end
+	
+	# Root
+	
+  def getRoot()
+		path = "/?oauth_token=#{@access_token}"
+		url = @base_url + path
+		get(url)
+	end
+	
+	# Subscriptions
+	
+	def getSubscribed(channel)
+	  return false if !@access_token
+		path = "/channels/#{channel}/subscriptions?oauth_token=#{@access_token}"
+		url = @base_url + path
+		get(url)
+	end
+	
+	def isSubscirbedToChannel(username, channel)
+	  return false if !@access_token
+		path = "/channels/#{channel}/subscriptions/#{username}?oauth_token=#{@access_token}"
+		url = @base_url + path
+		get(url)
+	end
 
 	private
 	def buildQueryString(options)
@@ -221,6 +369,11 @@ class Twitch
 				'Content-Type' => 'application/json',
 				'Api-Version' => '2.2'
 		})
+		{:body => c, :response => c.code}
+	end
+	
+	def delete(url)
+		c = HTTParty.delete(url)
 		{:body => c, :response => c.code}
 	end
 end
