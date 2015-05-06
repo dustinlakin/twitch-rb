@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    twitch (0.0.3)
+    twitch (0.0.4)
       httparty
       json
 
@@ -12,7 +12,7 @@ GEM
     httparty (0.13.3)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
-    json (1.8.1)
+    json (1.8.2)
     multi_xml (0.5.5)
     rspec (3.0.0)
       rspec-core (~> 3.0.0)

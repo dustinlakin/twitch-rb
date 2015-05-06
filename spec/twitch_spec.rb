@@ -104,5 +104,65 @@ describe Twitch do
 		res = @t.getFeaturedStreams({:limit => 100})
 		res[:response].should == 200 && res[:body]["featured"].length.should > 25
 	end
+	
+	it 'should get chat links' do
+	  @t = Twitch.new()
+	  @t.getChatLinks("day9tv")[:response].should == 200
+	end
+	
+	it 'should get chat badges' do
+	  @t = Twitch.new()
+	  @t.getBadges("day9tv")[:response].should == 200
+	end
+	
+	it 'should get chat emoticons' do
+	  @t = Twitch.new()
+	  @t.getEmoticons()[:response].should == 200
+	end
+	
+	it 'should get channel followers' do
+	  @t = Twitch.new()
+	  @t.getFollowing("day9tv")[:response].should == 200
+	end
+	
+	it 'should get channels followed by user' do
+	  @t = Twitch.new()
+	  @t.getFollowed("day9")[:response].should == 200
+	end
+	
+	it 'should get status of user following channel' do
+	  @t = Twitch.new()
+	  @t.getFollowStatus("day9", "day9tv")[:response].should == 404
+	end
+	
+	it 'should get ingests' do
+	  @t = Twitch.new()
+	  @t.getIngests[:response].should == 200
+	end
+	
+	it 'should get root' do
+	  @t = Twitch.new()
+	  @t.getRoot[:response].should == 200
+	end
+	
+	it 'should get your followed streams' do
+	  @t = Twitch.new()
+	  @t.getYourFollowedStreams.should == false
+	end
+	
+	it 'should get your followed videos' do
+	  @t = Twitch.new()
+	  @t.getYourFollowedVideos.should == false
+	end
+	
+	it 'should get top games' do
+	  @t = Twitch.new()
+	  @t.getTopGames[:response].should == 200
+	end
+	
+	it 'should get top videos' do
+	  @t = Twitch.new()
+	  @t.getTopVideos[:response].should == 200
+	end
 
 end
