@@ -101,12 +101,12 @@ describe Twitch do
 		expect(res[:body]["featured"].length).to eq 25
 	end
 
-	it 'should get featured streams' do
+	it 'should get more featured streams' do
 		@t = Twitch.new()
 		res = @t.getFeaturedStreams({:limit => 100})
 
 		expect(res[:response]).to eq 200
-		expect(res[:body]["featured"].length).to eq > 25
+		expect(res[:body]["featured"].length).to be > 25
 	end
 	
 	it 'should get chat links' do
@@ -167,6 +167,53 @@ describe Twitch do
 	it 'should get top videos' do
 	  @t = Twitch.new()
 	  expect(@t.getTopVideos[:response]).to eq 200
+	end
+
+	it 'should have a default adapter' do
+		t = Twitch.new
+
+		expect( t.adapter ).to eq(Twitch::Adapters::HTTPartyAdapter)
+	end
+
+	it 'should work with a different adapter (open-uri).' do
+		require 'open-uri' 
+
+		module Twitch
+			module Adapters
+				class OpenURIAdapter < BaseAdapter
+					def self.request(method, url, options={})
+						if (method == :get)
+							ret = {}
+
+							open(url) do |io|
+								ret[:body] = JSON.parse(io.read)
+								ret[:response] = io.status.first.to_i
+							end
+
+							ret
+						end
+					end
+				end # class OpenURIAdapter
+			end # module Adapters
+		end # module Twitch
+
+		t = Twitch.new adapter: Twitch::Adapters::OpenURIAdapter
+
+		res = t.getFeaturedStreams
+
+		expect( res[:response]          ).to eq 200
+		expect( res[:body]["featured"].length ).to eq 25
+	end
+
+	it "should fall-back to the default adapter when passed an invalid adapter" do
+		expect( Twitch.new( adapter: false         ).adapter ).to eq( Twitch::Adapters::DEFAULT_ADAPTER )
+		expect( Twitch.new( adapter: 100           ).adapter ).to eq( Twitch::Adapters::DEFAULT_ADAPTER )
+		expect( Twitch.new( adapter: :bad_constant ).adapter ).to eq( Twitch::Adapters::DEFAULT_ADAPTER )
+
+		t = Twitch.new
+		t.adapter = nil
+
+		expect( t.adapter ).to eq( Twitch::Adapters::DEFAULT_ADAPTER )
 	end
 
 end

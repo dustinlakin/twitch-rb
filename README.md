@@ -14,7 +14,7 @@ Install
 With Rails:
 
     #add to your Gemfile
-    gem 'twitch', '= 0.0.2'
+    gem 'twitch', '~> 0.0.5'
 
 
 Just irb or pry:
@@ -191,6 +191,43 @@ Videos
 
     @twitch.getVideo(12312123)
 
+Adapters
+-----
 
+To allow the gem to use different HTTP libraries, you can define an Adapter:
+
+    require 'open-uri' 
+
+    module Twitch
+      module Adapters
+        class OpenURIAdapter < BaseAdapter
+          def self.request(method, url, options={})
+            if (method == :get)
+              ret = {}
+
+              open(url) do |io|
+                ret[:body] = JSON.parse(io.read)
+                ret[:response] = io.status.first.to_i
+              end
+
+              ret
+            end
+          end
+        end # class OpenURIAdapter
+      end # module Adapters
+    end # module Twitch
+
+and then pass it into the Twitch class:
+
+    t = Twitch.new adapter: Twitch::Adapters::OpenURIAdapter
+
+    # or
+
+    t.adapter = Twitch::Adapters::OpenURIAdapter
+
+Adapters must be defined inside the Twitch::Adapters module, otherwise they will be considered invalid.
+Any invalid adapter passed to the library will revert to the default adapter.
+
+The default adapter is `Twitch::Adapters::HTTPartyAdapter` which uses the [HTTParty library](https://github.com/jnunemaker/httparty).
 
 Feel free to contribute or add functionality!
