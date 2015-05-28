@@ -27,7 +27,7 @@ module Twitch
       get_adapter(adapter)
     end
 
-    def getLink
+    def link
       scope = ""
       @scope.each { |s| scope += s + '+' }
       link = "https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=#{@client_id}&redirect_uri=#{@redirect_uri}&scope=#{scope}"
@@ -47,59 +47,74 @@ module Twitch
 
     # User
 
-    def getUser(user)
+    def user(user = nil)
+      return your_user unless user
+
       path = "/users/"
       url = @base_url + path + user;
+      
       get(url)
     end
 
-    def getYourUser
-      return false if !@access_token
+    def your_user
+      return false unless @access_token
+
       path = "/user?oauth_token=#{@access_token}"
       url = @base_url + path
+      
       get(url)
     end
 
     # Teams
 
-    def getTeams
+    def teams
       path = "/teams/"
       url = @base_url + path;
+      
       get(url)
     end
 
 
-    def getTeam(team_id)
+    def team(team_id)
       path = "/teams/"
       url = @base_url + path + team_id;
+      
       get(url)
     end
 
     # Channel
 
-    def getChannel(channel)
+    def channel(channel = nil)
+      return your_channel unless channel
+
       path = "/channels/"
       url = @base_url + path + channel;
+      
       get(url)
     end
 
-    def getYourChannel
-      return false if !@access_token
+    def your_channel
+      return false unless @access_token
+
       path = "/channel?oauth_token=#{@access_token}"
       url = @base_url + path;
+      
       get(url)
     end
     
-    def getEditors(channel)
-      return false if !@access_token
+    def editors(channel)
+      return false unless @access_token
+
       path = "/channels/#{channel}/editors?oauth_token=#{@access_token}"
       url = @base_url + path;
+      
       get(url)
     end
 
     # TODO: Add ability to set delay, which is only available for partered channels
-    def editChannel(channel, status, game)
-      return false if !@access_token
+    def edit_channel(channel, status, game)
+      return false unless @access_token
+
       path = "/channels/#{channel}/?oauth_token=#{@access_token}"
       url = @base_url + path
       data = {
@@ -111,29 +126,33 @@ module Twitch
       put(url, data)
     end
     
-    def resetKey(channel)
-      return false if !@access_token
+    def reset_key(channel)
+      return false unless @access_token
+
       path = "/channels/#{channel}/stream_key?oauth_token=#{@access_token}"
       url = @base_url + path
       delete(url)
     end
 
-    def followChannel(username, channel)
-      return false if !@access_token
+    def follow_channel(username, channel)
+      return false unless @access_token
+
       path = "/users/#{username}/follows/channels/#{channel}?oauth_token=#{@access_token}"
       url = @base_url + path
       put(url)
     end
     
-    def followChannel(username, channel)
-      return false if !@access_token
+    def follow_channel(username, channel)
+      return false unless @access_token
+
       path = "/users/#{username}/follows/channels/#{channel}?oauth_token=#{@access_token}"
       url = @base_url + path
       delete(url)
     end
 
-    def runCommercial(channel, length = 30)
-      return false if !@access_token
+    def run_commercial(channel, length = 30)
+      return false unless @access_token
+
       path = "/channels/#{channel}/commercial?oauth_token=#{@access_token}"
       url = @base_url + path
       post(url, {
@@ -141,143 +160,167 @@ module Twitch
       })
     end
     
-    def getChannelTeams(channel)
-      return false if !@access_token
+    def channel_teams(channel)
+      return false unless @access_token
+
       path = "/channels/#{channel}/teams?oauth_token=#{@access_token}"
       url = @base_url + path;
+      
       get(url)
     end
 
     # Streams
 
-    def getStream(stream_name)
+    def stream(stream_name)
       path = "/stream/#{stream_name}"
       url = @base_url + path;
+      
       get(url)
     end
 
-    def getStream(stream_name)
+    def stream(stream_name)
       path = "/streams/#{stream_name}"
       url = @base_url + path;
+      
       get(url)
     end
 
-    def getStreams(options = {})
-      query = buildQueryString(options)
+    def streams(options = {})
+      query = build_query_string(options)
       path = "/streams"
       url =  @base_url + path + query
+      
       get(url)
     end
 
-    def getFeaturedStreams(options = {})
-      query = buildQueryString(options)
+    def featured_streams(options = {})
+      query = build_query_string(options)
       path = "/streams/featured"
       url = @base_url + path + query
+      
       get(url)
     end
 
-    def getSummeraizedStreams(options = {})
-      query = buildQueryString(options)
+    def summarized_streams(options = {})
+      query = build_query_string(options)
       path = "/streams/summary"
       url = @base_url + path + query
+      
       get(url)
     end
 
-    def getYourFollowedStreams(options = {})
-      return false if !@access_token
-      query = buildQueryString(options)
+    def followed_streams(options = {})
+      return false unless @access_token
+
+      query = build_query_string(options)
       path = "/streams/followed?oauth_token=#{@access_token}"
       url = @base_url + path + query
+      
       get(url)
     end
+    alias :your_followed_streams :followed_streams
 
     #Games
 
-    def getTopGames(options = {})
-      query = buildQueryString(options)
+    def top_games(options = {})
+      query = build_query_string(options)
       path = "/games/top"
       url = @base_url + path + query
+      
       get(url)
     end
 
     #Search
     
-    def searchChannels(options = {})
-      query = buildQueryString(options)
+    def search_channels(options = {})
+      query = build_query_string(options)
       path = "/search/channels"
       url = @base_url + path + query
+      
       get(url)
     end
 
-    def searchStreams(options = {})
-      query = buildQueryString(options)
+    def search_streams(options = {})
+      query = build_query_string(options)
       path = "/search/streams"
       url = @base_url + path + query
+      
       get(url)
     end
 
-    def searchGames(options = {})
-      query = buildQueryString(options)
+    def search_games(options = {})
+      query = build_query_string(options)
       path = "/search/games"
       url = @base_url + path + query
+      
       get(url)
     end
 
     # Videos
 
-    def getChannelVideos(channel, options = {})
-      query = buildQueryString(options)
+    def channel_videos(channel, options = {})
+      query = build_query_string(options)
       path = "/channels/#{channel}/videos"
       url = @base_url + path + query
+      
       get(url)
     end
 
-    def getVideo(video_id)
+    def video(video_id)
       path = "/videos/#{video_id}/"
       url = @base_url + path
+      
       get(url)
     end
 
-    def isSubscribed(username, channel, options = {})
-      query = buildQueryString(options)
+    def subscribed?(username, channel, options = {})
+      query = build_query_string(options)
       path = "/users/#{username}/subscriptions/#{channel}?oauth_token=#{@access_token}"
       url = @base_url + path + query
+      
       get(url)
     end
     
-    def getYourFollowedVideos(options ={})
-      return false if !@access_token
-      query = buildQueryString(options)
+    def followed_videos(options ={})
+      return false unless @access_token
+
+      query = build_query_string(options)
       path = "/videos/followed?oauth_token=#{@access_token}"
       url = @base_url + path + query
+      
       get(url)
     end
+    alias :your_followed_videos :followed_videos
     
-    def getTopVideos(options = {})
-      query = buildQueryString(options)
+    def top_videos(options = {})
+      query = build_query_string(options)
       path = "/videos/top"
       url = @base_url + path + query
+      
       get(url)
     end
     
     # Blocks
     
-    def getBlocks(username, options = {})
-      query = buildQueryString(options)
+    def blocks(username, options = {})
+      query = build_query_string(options)
       path = "/users/#{username}/blocks?oauth_token=#{@access_token}"
       url = @base_url + path + query
+      
       get(url)
     end
     
-    def blockUser(username, target)
-      return false if !@access_token
+    def block_user(username, target)
+      return false unless @access_token
+
       path = "/users/#{username}/blocks/#{target}?oauth_token=#{@access_token}"
       url = @base_url + path
       put(url)
     end
     
-    def unblockUser(username, target)
-      return false if !@access_token
+    def unblock_user(username, target)
+      return false unless @access_token
+
       path = "/users/#{username}/blocks/#{target}?oauth_token=#{@access_token}"
       url = @base_url + path
       delete(url)
@@ -285,73 +328,85 @@ module Twitch
     
     # Chat
     
-    def getChatLinks(channel)
+    def chat_links(channel)
       path = "/chat/"
       url = @base_url + path + channel;
+      
       get(url)
     end
     
-    def getBadges(channel)
+    def badges(channel)
       path = "/chat/#{channel}/badges"
       url = @base_url + path;
+      
       get(url)
     end
     
-    def getEmoticons()
+    def emoticons()
       path = "/chat/emoticons"
       url = @base_url + path;
+      
       get(url)
     end
     
     # Follows
     
-    def getFollowing(channel)
+    def following(channel)
       path = "/channels/#{channel}/follows"
       url = @base_url + path;
+      
       get(url)
     end
     
-    def getFollowed(username)
+    def followed(username)
       path = "/users/#{username}/follows/channels"
       url = @base_url + path;
+      
       get(url)
     end
     
-    def getFollowStatus(username, channel)
+    def follow_status(username, channel)
       path = "/users/#{username}/follows/channels/#{channel}/?oauth_token=#{@access_token}"
       url = @base_url + path;
+      
       get(url)
     end
     
     # Ingests
     
-    def getIngests()
+    def ingests()
       path = "/ingests"
       url = @base_url + path
+      
       get(url)
     end
     
     # Root
     
-    def getRoot()
+    def root()
       path = "/?oauth_token=#{@access_token}"
       url = @base_url + path
+      
       get(url)
     end
     
     # Subscriptions
     
-    def getSubscribed(channel)
-      return false if !@access_token
+    def subscribed(channel)
+      return false unless @access_token
+
       path = "/channels/#{channel}/subscriptions?oauth_token=#{@access_token}"
       url = @base_url + path
+      
       get(url)
     end
     
-    def isSubscribedToChannel(username, channel)
-      return false if !@access_token
+    def subscribed_to_channel(username, channel)
+      return false unless @access_token
+
       path = "/channels/#{channel}/subscriptions/#{username}?oauth_token=#{@access_token}"
       url = @base_url + path
+      
       get(url)
     end
   end

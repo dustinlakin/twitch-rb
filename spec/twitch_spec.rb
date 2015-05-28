@@ -19,154 +19,154 @@ describe Twitch do
 			:redirect_uri => @redirect_uri,
 			:scope => ["user_read", "channel_read", "channel_editor", "channel_commercial", "channel_stream", "user_blocks_edit"]
 			})
-		expect(@t.getLink()).to eq "https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=#{@client_id}&redirect_uri=#{@redirect_uri}&scope=#{@scope_str}"
+		expect( @t.link ).to eq "https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=#{@client_id}&redirect_uri=#{@redirect_uri}&scope=#{@scope_str}"
 	end
 
 	it 'should get user (not authenticated)' do
 		@t = Twitch.new()
-		expect(@t.getUser("day9")[:response]).to eq 200
+		expect( @t.user("day9")[:response] ).to eq 200
 	end
 
 	it 'should get user (authenticated)' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect(@t.getUser("day9")[:response]).to eq 200
+		expect( @t.user("day9")[:response] ).to eq 200
 	end
 
 	it 'should get authenticated user' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect(@t.getYourUser()[:response]).to eq 200
+		expect( @t.user()[:response] ).to eq 200
 	end
 
 	it 'should not get authenticated user when not authenticated' do
 		@t = Twitch.new()
-		expect(@t.getYourUser()).to eq false
+		expect( @t.user() ).to eq false
 	end
 
 	it 'should get all teams' do
 		@t = Twitch.new()
-		expect(@t.getTeams()[:response]).to eq 200
+		expect( @t.teams()[:response] ).to eq 200
 	end
 
 	it 'should get single team' do
 		@t = Twitch.new()
-		expect(@t.getTeam("eg")[:response]).to eq 200
+		expect( @t.team("eg")[:response] ).to eq 200
 	end
 
 
 	it 'should get single channel' do
 		@t = Twitch.new()
-		expect(@t.getChannel("day9tv")[:response]).to eq 200
+		expect( @t.channel("day9tv")[:response] ).to eq 200
 	end
 
 	it 'should get your channel' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect(@t.getYourChannel()[:response]).to eq 200
+		expect( @t.channel()[:response] ).to eq 200
 	end
 
 	it 'should edit your channel' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect(@t.editChannel("Changing API", "Diablo III")[:response]).to eq 200
+		expect( @t.edit_channel("Changing API", "Diablo III")[:response] ).to eq 200
 	end
 
 	# it 'should run a comercial on your channel' do
 	# 	@t = Twitch.new({:access_token => @access_token})
-	#   expect(@t.runCommercial("dustinlakin")[:response]).to eq 204
+	#   expect( @t.runCommercial("dustinlakin")[:response] ).to eq 204
 	# end
 
 	it 'should get a single user stream' do
 		@t = Twitch.new()
-		expect(@t.getStream("nasltv")[:response]).to eq 200
+		expect( @t.stream("nasltv")[:response] ).to eq 200
 	end
 
 	it 'should get all streams' do
 		@t = Twitch.new()
-		expect(@t.getStreams()[:response]).to eq 200
+		expect( @t.streams()[:response] ).to eq 200
 	end
 
 	it 'should get League of Legends streams with +' do
 		@t = Twitch.new()
-		expect(@t.getStreams({:game => "League+of+Legends"})[:response]).to eq 200
+		expect( @t.streams({:game => "League+of+Legends"})[:response] ).to eq 200
 	end
 
 	it 'should get League of Legends streams with spaces' do
 		@t = Twitch.new()
-		expect(@t.getStreams({:game => "League of Legends"})[:response]).to eq 200
+		expect( @t.streams({:game => "League of Legends"})[:response] ).to eq 200
 	end
 
 	it 'should get featured streams' do
 		@t = Twitch.new()
-		res = @t.getFeaturedStreams()
+		res = @t.featured_streams()
 
-		expect(res[:response]).to eq 200
-		expect(res[:body]["featured"].length).to eq 25
+		expect(res[:response] ).to eq 200
+		expect(res[:body]["featured"].length ).to eq 25
 	end
 
 	it 'should get more featured streams' do
 		@t = Twitch.new()
-		res = @t.getFeaturedStreams({:limit => 100})
+		res = @t.featured_streams({:limit => 100})
 
-		expect(res[:response]).to eq 200
+		expect(res[:response] ).to eq 200
 		expect(res[:body]["featured"].length).to be > 25
 	end
 	
 	it 'should get chat links' do
 	  @t = Twitch.new()
-	  expect(@t.getChatLinks("day9tv")[:response]).to eq 200
+	  expect( @t.chat_links("day9tv")[:response] ).to eq 200
 	end
 	
 	it 'should get chat badges' do
 	  @t = Twitch.new()
-	  expect(@t.getBadges("day9tv")[:response]).to eq 200
+	  expect( @t.badges("day9tv")[:response] ).to eq 200
 	end
 	
 	it 'should get chat emoticons' do
 	  @t = Twitch.new()
-	  expect(@t.getEmoticons()[:response]).to eq 200
+	  expect( @t.emoticons()[:response] ).to eq 200
 	end
 	
 	it 'should get channel followers' do
 	  @t = Twitch.new()
-	  expect(@t.getFollowing("day9tv")[:response]).to eq 200
+	  expect( @t.following("day9tv")[:response] ).to eq 200
 	end
 	
 	it 'should get channels followed by user' do
 	  @t = Twitch.new()
-	  expect(@t.getFollowed("day9")[:response]).to eq 200
+	  expect( @t.followed("day9")[:response] ).to eq 200
 	end
 	
 	it 'should get status of user following channel' do
 	  @t = Twitch.new()
-	  expect(@t.getFollowStatus("day9", "day9tv")[:response]).to eq 404
+	  expect( @t.follow_status("day9", "day9tv")[:response] ).to eq 404
 	end
 	
 	it 'should get ingests' do
 	  @t = Twitch.new()
-	  expect(@t.getIngests[:response]).to eq 200
+	  expect( @t.ingests[:response] ).to eq 200
 	end
 	
 	it 'should get root' do
 	  @t = Twitch.new()
-	  expect(@t.getRoot[:response]).to eq 200
+	  expect( @t.root[:response] ).to eq 200
 	end
 	
 	it 'should get your followed streams' do
 	  @t = Twitch.new()
-	  expect(@t.getYourFollowedStreams).to eq false
+	  expect( @t.followed_streams() ).to eq false
 	end
 	
 	it 'should get your followed videos' do
 	  @t = Twitch.new()
-	  expect(@t.getYourFollowedVideos).to eq false
+	  expect( @t.followed_videos() ).to eq false
 	end
 	
 	it 'should get top games' do
 	  @t = Twitch.new()
-	  expect(@t.getTopGames[:response]).to eq 200
+	  expect( @t.top_games[:response] ).to eq 200
 	end
 	
 	it 'should get top videos' do
 	  @t = Twitch.new()
-	  expect(@t.getTopVideos[:response]).to eq 200
+	  expect( @t.top_videos[:response] ).to eq 200
 	end
 
 	it 'should have a default adapter' do
@@ -199,9 +199,9 @@ describe Twitch do
 
 		t = Twitch.new adapter: Twitch::Adapters::OpenURIAdapter
 
-		res = t.getFeaturedStreams
+		res = t.featured_streams
 
-		expect( res[:response]          ).to eq 200
+		expect( res[:response]                ).to eq 200
 		expect( res[:body]["featured"].length ).to eq 25
 	end
 
@@ -217,3 +217,4 @@ describe Twitch do
 	end
 
 end
+
