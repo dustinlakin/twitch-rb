@@ -1,6 +1,6 @@
 module Twitch
   module Request
-    def buildQueryString(options)
+    def build_query_string(options)
       query = "?"
       options.each do |key, value|
         query += "#{key}=#{value.to_s.gsub(" ", "+")}&"
