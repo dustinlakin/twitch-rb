@@ -212,8 +212,9 @@ module Twitch
     def followed_streams(options = {})
       return false unless @access_token
 
+      options[:oauth_token] = @access_token
       query = build_query_string(options)
-      path = "/streams/followed?oauth_token=#{@access_token}"
+      path = "/streams/followed"
       url = @base_url + path + query
       
       get(url)
@@ -274,8 +275,9 @@ module Twitch
     end
 
     def subscribed?(username, channel, options = {})
+      options[:oauth_token] = @access_token
       query = build_query_string(options)
-      path = "/users/#{username}/subscriptions/#{channel}?oauth_token=#{@access_token}"
+      path = "/users/#{username}/subscriptions/#{channel}"
       url = @base_url + path + query
       
       get(url)
@@ -284,8 +286,9 @@ module Twitch
     def followed_videos(options ={})
       return false unless @access_token
 
+      options[:oauth_token] = @access_token
       query = build_query_string(options)
-      path = "/videos/followed?oauth_token=#{@access_token}"
+      path = "/videos/followed"
       url = @base_url + path + query
       
       get(url)
@@ -303,8 +306,9 @@ module Twitch
     # Blocks
     
     def blocks(username, options = {})
+      options[:oauth_token] = @access_token
       query = build_query_string(options)
-      path = "/users/#{username}/blocks?oauth_token=#{@access_token}"
+      path = "/users/#{username}/blocks"
       url = @base_url + path + query
       
       get(url)
