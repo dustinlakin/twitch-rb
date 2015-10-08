@@ -396,11 +396,13 @@ module Twitch
 
     # Subscriptions
 
-    def subscribed(channel)
+    def subscribed(channel, options = {})
       return false unless @access_token
+      options[:oauth_token] = @access_token
 
-      path = "/channels/#{channel}/subscriptions?oauth_token=#{@access_token}"
-      url = @base_url + path
+      query = build_query_string(options)
+      path = "/channels/#{channel}/subscriptions"
+      url = @base_url + path + query
 
       get(url)
     end
