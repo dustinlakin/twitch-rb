@@ -142,7 +142,7 @@ module Twitch
       put(url)
     end
     
-    def follow_channel(username, channel)
+    def unfollow_channel(username, channel)
       return false unless @access_token
 
       path = "/users/#{username}/follows/channels/#{channel}?oauth_token=#{@access_token}"
