@@ -29,12 +29,12 @@ describe Twitch do
 
 	it 'should get user (authenticated)' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect( @t.user("day9")[:response] ).to eq 200
+		expect( @t.user("day9")[:response] ).to eq 200 unless @access_token.empty?
 	end
 
 	it 'should get authenticated user' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect( @t.user()[:response] ).to eq 200
+		expect( @t.user()[:response] ).to eq 200 unless @access_token.empty?
 	end
 
 	it 'should not get authenticated user when not authenticated' do
@@ -60,12 +60,12 @@ describe Twitch do
 
 	it 'should get your channel' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect( @t.channel()[:response] ).to eq 200
+		expect( @t.channel()[:response] ).to eq 200 unless @access_token.empty?
 	end
 
 	it 'should edit your channel' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect( @t.edit_channel("Changing API", "Diablo III")[:response] ).to eq 200
+		expect( @t.edit_channel("Changing API", "Diablo III")[:response] ).to eq 200 unless @access_token.empty?
 	end
 
 	# it 'should run a comercial on your channel' do
@@ -129,9 +129,19 @@ describe Twitch do
 	  expect( @t.following("day9tv")[:response] ).to eq 200
 	end
 	
+	it 'should get channel followers with page 2' do
+	  @t = Twitch.new()
+	  expect( @t.following("day9tv", offset: 25, limit: 25)[:response] ).to eq 200
+	end
+	
 	it 'should get channels followed by user' do
 	  @t = Twitch.new()
 	  expect( @t.followed("day9")[:response] ).to eq 200
+	end
+	
+	it 'should get channels followed by user with page 2' do
+	  @t = Twitch.new()
+	  expect( @t.followed("day9", offset: 25, limit: 25)[:response] ).to eq 200
 	end
 	
 	it 'should get status of user following channel' do
@@ -148,12 +158,12 @@ describe Twitch do
 	  @t = Twitch.new()
 	  expect( @t.root[:response] ).to eq 200
 	end
-	
+
 	it 'should get your followed streams' do
 	  @t = Twitch.new()
 	  expect( @t.followed_streams() ).to eq false
 	end
-	
+
 	it 'should get your followed videos' do
 	  @t = Twitch.new()
 	  expect( @t.followed_videos() ).to eq false
