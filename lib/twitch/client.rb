@@ -355,16 +355,18 @@ module Twitch
 
     # Follows
 
-    def following(channel)
+    def following(channel, options = {})
+      query = build_query_string(options)
       path = "/channels/#{channel}/follows"
-      url = @base_url + path;
+      url = @base_url + path + query;
 
       get(url)
     end
 
-    def followed(username)
+    def followed(username, options = {})
+      query = build_query_string(options)
       path = "/users/#{username}/follows/channels"
-      url = @base_url + path;
+      url = @base_url + path + query
 
       get(url)
     end
