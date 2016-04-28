@@ -165,6 +165,15 @@ returns:
 @twitch.run_commercial "lethalfrag", 30
 ```
 
+### Follows
+
+```@twitch.following 'esl_csgo'```
+
+----
+
+```@twitch.followed 'esl_csgo'```
+
+
 ### Streams
 
 ```ruby
