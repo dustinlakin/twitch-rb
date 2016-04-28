@@ -129,6 +129,10 @@ returns:
 @twitch.channel "lethalfrag"
 ```
 
+```ruby
+@twitch.channel_panels "lethalfrag"
+```
+
 ----
 
 ```ruby
