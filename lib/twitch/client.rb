@@ -172,13 +172,6 @@ module Twitch
     # Streams
 
     def stream(stream_name)
-      path = "/stream/#{stream_name}"
-      url = @base_url + path;
-
-      get(url)
-    end
-
-    def stream(stream_name)
       path = "/streams/#{stream_name}"
       url = @base_url + path;
 
