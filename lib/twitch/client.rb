@@ -16,6 +16,7 @@ module Twitch
       @adapter = get_adapter(options[:adapter] || nil)
 
       @base_url = "https://api.twitch.tv/kraken"
+      @alt_base_url = "https://api.twitch.tv/api"
     end
 
     attr_reader :base_url, :redirect_url, :scope
@@ -89,6 +90,15 @@ module Twitch
 
       path = "/channels/"
       url = @base_url + path + channel;
+
+      get(url)
+    end
+
+    def channel_panels(channel = nil)
+      return nil if channel.nil?
+
+      path = "/channels/#{channel}/panels"
+      url = @alt_base_url + path;
 
       get(url)
     end

@@ -129,6 +129,10 @@ returns:
 @twitch.channel "lethalfrag"
 ```
 
+```ruby
+@twitch.channel_panels "lethalfrag"
+```
+
 ----
 
 ```ruby
@@ -160,6 +164,15 @@ returns:
 
 @twitch.run_commercial "lethalfrag", 30
 ```
+
+### Follows
+
+```@twitch.following 'esl_csgo'```
+
+----
+
+```@twitch.followed 'esl_csgo'```
+
 
 ### Streams
 

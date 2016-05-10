@@ -58,7 +58,12 @@ describe Twitch do
 		expect( @t.channel("day9tv")[:response] ).to eq 200
 	end
 
-	it 'should get your channel' do
+	it 'should get channel panels' do
+                @t = Twitch.new()
+		expect( @t.channel_panels("esl_csgo")[:response] ).to eq 200
+	end
+
+        it 'should get your channel' do
 		@t = Twitch.new({:access_token => @access_token})
 		expect( @t.channel()[:response] ).to eq 200 unless @access_token.empty?
 	end
