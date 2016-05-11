@@ -1,4 +1,4 @@
-# Twitch API 0.1.2
+# Twitch API
 
 This gem simplifies the Twitch-API for ruby users.
 
