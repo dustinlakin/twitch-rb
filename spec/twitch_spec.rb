@@ -29,12 +29,12 @@ describe Twitch do
 
 	it 'should get user (authenticated)' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect( @t.user("day9")[:response] ).to eq 200
+		expect( @t.user("day9")[:response] ).to eq 200 unless @access_token.empty?
 	end
 
 	it 'should get authenticated user' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect( @t.user()[:response] ).to eq 200
+		expect( @t.user()[:response] ).to eq 200 unless @access_token.empty?
 	end
 
 	it 'should not get authenticated user when not authenticated' do
@@ -52,20 +52,24 @@ describe Twitch do
 		expect( @t.team("eg")[:response] ).to eq 200
 	end
 
-
 	it 'should get single channel' do
 		@t = Twitch.new()
 		expect( @t.channel("day9tv")[:response] ).to eq 200
 	end
 
-	it 'should get your channel' do
+	it 'should get channel panels' do
+                @t = Twitch.new()
+		expect( @t.channel_panels("esl_csgo")[:response] ).to eq 200
+	end
+
+        it 'should get your channel' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect( @t.channel()[:response] ).to eq 200
+		expect( @t.channel()[:response] ).to eq 200 unless @access_token.empty?
 	end
 
 	it 'should edit your channel' do
 		@t = Twitch.new({:access_token => @access_token})
-		expect( @t.edit_channel("Changing API", "Diablo III")[:response] ).to eq 200
+		expect( @t.edit_channel("Changing API", "Diablo III")[:response] ).to eq 200 unless @access_token.empty?
 	end
 
 	# it 'should run a comercial on your channel' do
@@ -108,62 +112,72 @@ describe Twitch do
 		expect(res[:response] ).to eq 200
 		expect(res[:body]["featured"].length).to be > 25
 	end
-	
+
 	it 'should get chat links' do
 	  @t = Twitch.new()
 	  expect( @t.chat_links("day9tv")[:response] ).to eq 200
 	end
-	
+
 	it 'should get chat badges' do
 	  @t = Twitch.new()
 	  expect( @t.badges("day9tv")[:response] ).to eq 200
 	end
-	
+
 	it 'should get chat emoticons' do
 	  @t = Twitch.new()
 	  expect( @t.emoticons()[:response] ).to eq 200
 	end
-	
+
 	it 'should get channel followers' do
 	  @t = Twitch.new()
 	  expect( @t.following("day9tv")[:response] ).to eq 200
 	end
-	
+
+	it 'should get channel followers with page 2' do
+	  @t = Twitch.new()
+	  expect( @t.following("day9tv", offset: 25, limit: 25)[:response] ).to eq 200
+	end
+
 	it 'should get channels followed by user' do
 	  @t = Twitch.new()
 	  expect( @t.followed("day9")[:response] ).to eq 200
 	end
-	
+
+	it 'should get channels followed by user with page 2' do
+	  @t = Twitch.new()
+	  expect( @t.followed("day9", offset: 25, limit: 25)[:response] ).to eq 200
+	end
+
 	it 'should get status of user following channel' do
 	  @t = Twitch.new()
 	  expect( @t.follow_status("day9", "day9tv")[:response] ).to eq 404
 	end
-	
+
 	it 'should get ingests' do
 	  @t = Twitch.new()
 	  expect( @t.ingests[:response] ).to eq 200
 	end
-	
+
 	it 'should get root' do
 	  @t = Twitch.new()
 	  expect( @t.root[:response] ).to eq 200
 	end
-	
+
 	it 'should get your followed streams' do
 	  @t = Twitch.new()
 	  expect( @t.followed_streams() ).to eq false
 	end
-	
+
 	it 'should get your followed videos' do
 	  @t = Twitch.new()
 	  expect( @t.followed_videos() ).to eq false
 	end
-	
+
 	it 'should get top games' do
 	  @t = Twitch.new()
 	  expect( @t.top_games[:response] ).to eq 200
 	end
-	
+
 	it 'should get top videos' do
 	  @t = Twitch.new()
 	  expect( @t.top_videos[:response] ).to eq 200

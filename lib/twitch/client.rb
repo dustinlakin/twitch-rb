@@ -16,6 +16,7 @@ module Twitch
       @adapter = get_adapter(options[:adapter] || nil)
 
       @base_url = "https://api.twitch.tv/kraken"
+      @alt_base_url = "https://api.twitch.tv/api"
     end
 
     attr_reader :base_url, :redirect_url, :scope
@@ -89,6 +90,15 @@ module Twitch
 
       path = "/channels/"
       url = @base_url + path + channel;
+
+      get(url)
+    end
+
+    def channel_panels(channel = nil)
+      return nil if channel.nil?
+
+      path = "/channels/#{channel}/panels"
+      url = @alt_base_url + path;
 
       get(url)
     end
@@ -170,13 +180,6 @@ module Twitch
     end
 
     # Streams
-
-    def stream(stream_name)
-      path = "/stream/#{stream_name}"
-      url = @base_url + path;
-
-      get(url)
-    end
 
     def stream(stream_name)
       path = "/streams/#{stream_name}"
@@ -355,16 +358,18 @@ module Twitch
 
     # Follows
 
-    def following(channel)
+    def following(channel, options = {})
+      query = build_query_string(options)
       path = "/channels/#{channel}/follows"
-      url = @base_url + path;
+      url = @base_url + path + query;
 
       get(url)
     end
 
-    def followed(username)
+    def followed(username, options = {})
+      query = build_query_string(options)
       path = "/users/#{username}/follows/channels"
-      url = @base_url + path;
+      url = @base_url + path + query
 
       get(url)
     end
