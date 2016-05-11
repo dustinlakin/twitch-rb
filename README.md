@@ -2,8 +2,6 @@
 
 This gem simplifies the Twitch-API for ruby users.
 
-http://lak.in // http://twitter.com/dustinlakin
-
 
 ## Install
 
