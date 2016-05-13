@@ -9,3 +9,5 @@ doc/*
 log/*
 measurement/*
 pkg/*
+# IDE specific files
+.idea/*
