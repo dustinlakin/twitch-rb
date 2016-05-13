@@ -1,7 +1,7 @@
 require 'twitch/adapters'
-require 'twitch/client'
 require 'twitch/request'
 require 'twitch/version'
+require 'twitch/client'
 
 module Twitch
   def self.new(options={})
