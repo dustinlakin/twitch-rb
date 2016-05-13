@@ -1,5 +1,3 @@
-require 'twitch/request'
-require 'twitch/adapters'
 
 module Twitch
   class Client
