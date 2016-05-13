@@ -35,13 +35,14 @@ module Twitch
     def auth(code)
       path = "/oauth2/token"
       url = @base_url + path
-      post(url, {
-        :client_id => @client_id,
-        :client_secret => @secret_key,
-        :grant_type => "authorization_code",
-        :redirect_uri => @redirect_uri,
-        :code => code
-      })
+      res = post(url, {
+              :client_id => @client_id,
+              :client_secret => @secret_key,
+              :grant_type => "authorization_code",
+              :redirect_uri => @redirect_uri,
+              :code => code
+            })
+      User.new(res[:body]["access_token"])
     end
 
     # User
