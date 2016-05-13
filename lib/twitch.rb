@@ -1,6 +1,7 @@
 require 'twitch/adapters'
 require 'twitch/request'
 require 'twitch/version'
+require 'twitch/user'
 require 'twitch/client'
 
 module Twitch
