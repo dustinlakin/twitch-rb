@@ -1,5 +1,3 @@
-require 'twitch/request'
-require 'twitch/adapters'
 
 module Twitch
   class Client
@@ -52,7 +50,7 @@ module Twitch
       return your_user unless user
 
       path = "/users/"
-      url = @base_url + path + user;
+      url = @base_url + path + user
 
       get(url)
     end
@@ -70,7 +68,7 @@ module Twitch
 
     def teams
       path = "/teams/"
-      url = @base_url + path;
+      url = @base_url + path
 
       get(url)
     end
@@ -78,7 +76,7 @@ module Twitch
 
     def team(team_id)
       path = "/teams/"
-      url = @base_url + path + team_id;
+      url = @base_url + path + team_id
 
       get(url)
     end
@@ -89,7 +87,7 @@ module Twitch
       return your_channel unless channel
 
       path = "/channels/"
-      url = @base_url + path + channel;
+      url = @base_url + path + channel
 
       get(url)
     end
@@ -98,7 +96,7 @@ module Twitch
       return nil if channel.nil?
 
       path = "/channels/#{channel}/panels"
-      url = @alt_base_url + path;
+      url = @alt_base_url + path
 
       get(url)
     end
@@ -107,7 +105,7 @@ module Twitch
       return false unless @access_token
 
       path = "/channel?oauth_token=#{@access_token}"
-      url = @base_url + path;
+      url = @base_url + path
 
       get(url)
     end
@@ -116,7 +114,7 @@ module Twitch
       return false unless @access_token
 
       path = "/channels/#{channel}/editors?oauth_token=#{@access_token}"
-      url = @base_url + path;
+      url = @base_url + path
 
       get(url)
     end
@@ -174,7 +172,7 @@ module Twitch
       return false unless @access_token
 
       path = "/channels/#{channel}/teams?oauth_token=#{@access_token}"
-      url = @base_url + path;
+      url = @base_url + path
 
       get(url)
     end
@@ -183,7 +181,7 @@ module Twitch
 
     def stream(stream_name)
       path = "/streams/#{stream_name}"
-      url = @base_url + path;
+      url = @base_url + path
 
       get(url)
     end
@@ -337,21 +335,21 @@ module Twitch
 
     def chat_links(channel)
       path = "/chat/"
-      url = @base_url + path + channel;
+      url = @base_url + path + channel
 
       get(url)
     end
 
     def badges(channel)
       path = "/chat/#{channel}/badges"
-      url = @base_url + path;
+      url = @base_url + path
 
       get(url)
     end
 
     def emoticons()
       path = "/chat/emoticons"
-      url = @base_url + path;
+      url = @base_url + path
 
       get(url)
     end
@@ -361,7 +359,7 @@ module Twitch
     def following(channel, options = {})
       query = build_query_string(options)
       path = "/channels/#{channel}/follows"
-      url = @base_url + path + query;
+      url = @base_url + path + query
 
       get(url)
     end
@@ -376,7 +374,7 @@ module Twitch
 
     def follow_status(username, channel)
       path = "/users/#{username}/follows/channels/#{channel}/?oauth_token=#{@access_token}"
-      url = @base_url + path;
+      url = @base_url + path
 
       get(url)
     end

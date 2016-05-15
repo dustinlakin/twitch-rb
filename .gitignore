@@ -9,3 +9,9 @@ doc/*
 log/*
 measurement/*
 pkg/*
+
+# IDE specific files
+.idea/*
+
+# Ignore documentation
+doc/*
