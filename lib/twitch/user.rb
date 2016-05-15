@@ -128,11 +128,12 @@ module Twitch
     def unfollow_channel(channel)
       path = "/users/#{@name}/follows/channels/#{channel}?oauth_token=#{@access_token}"
       url = BASE_URL + path
+
       check_error delete(url)
     end
 
     # Run a commercial for your stream
-    # Note: channel must be a partner with twitch
+    # Note: your channel must be a partner with twitch
     def run_commercial(length = 30)
       path = "/channels/#{@name}/commercial?oauth_token=#{@access_token}"
       url = BASE_URL + path
@@ -179,10 +180,9 @@ module Twitch
 
     # unblock a specified user
     def unblock_user(target)
-      return false unless @access_token
-
       path = "/users/#{@name}/blocks/#{target}?oauth_token=#{@access_token}"
       url = BASE_URL + path
+
       check_error delete(url)
     end
 
@@ -232,23 +232,21 @@ module Twitch
 
     private
       def get_user_info(access_token)
-
         path = "/user?oauth_token=#{access_token}"
         url = BASE_URL + path
 
         info = get(url)
 
         check_error(info)
-
       end
 
       def check_error(info)
         status = info[:body].headers["status"].split(' ').first.to_i
         case status
           when 400...500
-            raise "User error... \nyou are doing something, that you are not supposed to do"
+            raise "#{status} status code"
           when 500...600
-            raise "Server error... \n"
+            raise "#{status} status code"
           else
            info[:body] # ignore, assume success and return successfully acquired data
         end
