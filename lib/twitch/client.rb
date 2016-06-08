@@ -7,10 +7,10 @@ module Twitch
     include Twitch::Adapters
 
     def initialize(options = {})
-      @client_id = options[:client_id] || nil
-      @secret_key = options[:secret_key] || nil
-      @redirect_uri = options[:redirect_uri] || nil
-      @scope = options[:scope] || nil
+      @client_id = options[:client_id] || ""
+      @secret_key = options[:secret_key] || ""
+      @redirect_uri = options[:redirect_uri] || ""
+      @scope = options[:scope] || []
       @access_token = options[:access_token] || nil
 
       @adapter = get_adapter(options[:adapter] || nil)
