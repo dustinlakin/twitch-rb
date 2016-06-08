@@ -4,7 +4,7 @@ require 'twitch/adapters/httparty_adapter'
 module Twitch
   module Adapters
     DEFAULT_ADAPTER = Twitch::Adapters::HTTPartyAdapter
-    
+
     def get_adapter(adapter, default_adapter = DEFAULT_ADAPTER)
       begin
         Twitch::Adapters.const_defined?(adapter.to_s)
@@ -15,4 +15,4 @@ module Twitch
       end
     end
   end
-end 
+end
