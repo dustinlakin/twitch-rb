@@ -144,11 +144,12 @@ module Twitch
       delete(url)
     end
 
-    def follow_channel(username, channel)
+    def follow_channel(username, channel, notifications=nil)
       return false unless @access_token
 
       path = "/users/#{username}/follows/channels/#{channel}?oauth_token=#{@access_token}"
-      url = @base_url + path
+      notifications_suffix = notifications.nil? ? "" : "&notifications=#{!!notifications}"
+      url = @base_url + path + notifications_suffix
       put(url)
     end
 
