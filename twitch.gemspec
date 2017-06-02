@@ -1,6 +1,7 @@
 $:.push File.expand_path("../lib", __FILE__)
 
 require "twitch/version"
+require "date"
 
 Gem::Specification.new do |s|
   s.name        = 'twitch'
@@ -14,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.files       = Dir["lib/**/*"]
   s.require_paths = ["lib"]
-  
+
   s.add_dependency('httparty')
   s.add_dependency('json')
   s.add_development_dependency('rspec')
