@@ -1,0 +1,59 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.twitch.tv/kraken/channels/44322889
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.twitchtv.v5+json
+      User-Agent:
+      - Faraday v1.0.1
+      Client-ID:
+      - "<CLIENT_ID>"
+      Authorization:
+      - OAuth <ACTUAL_ACCESS_TOKEN>
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      connection:
+      - keep-alive
+      content-length:
+      - '800'
+      content-type:
+      - application/json; charset=utf-8
+      access-control-allow-origin:
+      - "*"
+      cache-control:
+      - no-cache, no-store, must-revalidate, private
+      expires:
+      - '0'
+      pragma:
+      - no-cache
+      timing-allow-origin:
+      - https://www.twitch.tv
+      date:
+      - Sun, 05 Apr 2020 12:57:07 GMT
+      x-served-by:
+      - cache-sea4440-SEA, cache-hel6822-HEL
+      x-cache:
+      - MISS, MISS
+      x-cache-hits:
+      - 0, 0
+      x-timer:
+      - S1586091427.106923,VS0,VS0,VE210
+      vary:
+      - Accept-Encoding
+      strict-transport-security:
+      - max-age=300
+    body:
+      encoding: UTF-8
+      string: '{"mature":true,"status":"Slayin'' monsters in the new Dauntless patch!","broadcaster_language":"en","broadcaster_software":"unknown_rtmp","display_name":"dallas","game":"Dauntless","language":"en","_id":"44322889","name":"dallas","created_at":"2013-06-03T19:12:02Z","updated_at":"2020-04-05T12:30:46Z","partner":false,"logo":"https://static-cdn.jtvnw.net/jtv_user_pictures/4d1f36cbf1f0072d-profile_image-300x300.png","video_banner":"https://static-cdn.jtvnw.net/jtv_user_pictures/51737668f60f7dcc-channel_offline_image-1920x1080.png","profile_banner":null,"profile_banner_background_color":null,"url":"https://www.twitch.tv/dallas","views":30532,"followers":254,"broadcaster_type":"affiliate","description":"Friendly,
+        interactive, and very bald.","private_video":false,"privacy_options_enabled":false}'
+    http_version: null
+  recorded_at: Sun, 05 Apr 2020 12:57:07 GMT
+recorded_with: VCR 5.1.0

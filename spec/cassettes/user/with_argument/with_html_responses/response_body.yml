@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.twitch.tv/kraken/users/44322889
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.twitchtv.v5+json
+      User-Agent:
+      - Faraday v1.1.0
+      Client-ID:
+      - "<CLIENT_ID>"
+      Authorization:
+      - OAuth <ACTUAL_ACCESS_TOKEN>
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      connection:
+      - keep-alive
+      content-length:
+      - '303'
+      content-type:
+      - text/html; charset=UTF-8
+      access-control-allow-origin:
+      - "*"
+      cache-control:
+      - no-cache, no-store, must-revalidate, private
+      expires:
+      - '0'
+      pragma:
+      - no-cache
+      timing-allow-origin:
+      - https://www.twitch.tv
+      date:
+      - Fri, 27 Nov 2020 12:51:35 GMT
+      x-served-by:
+      - cache-sea4420-SEA, cache-bma1636-BMA
+      x-cache:
+      - MISS, MISS
+      x-cache-hits:
+      - 0, 0
+      x-timer:
+      - S1606481495.925695,VS0,VS0,VE172
+      vary:
+      - Accept-Encoding
+      strict-transport-security:
+      - max-age=300
+    body:
+      encoding: UTF-8
+      string: |
+        <html>
+          <head>
+            <title>Test</title>
+          </head>
+          <body>
+            <h1>Hello, world!</h1>
+          </body>
+        </html>
+  recorded_at: Fri, 27 Nov 2020 12:51:35 GMT
+recorded_with: VCR 6.0.0

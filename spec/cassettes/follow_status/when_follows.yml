@@ -1,0 +1,60 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.twitch.tv/kraken/users/117474239/follows/channels/128644134
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.twitchtv.v5+json
+      User-Agent:
+      - Faraday v1.0.1
+      Client-ID:
+      - "<CLIENT_ID>"
+      Authorization:
+      - OAuth <ACTUAL_ACCESS_TOKEN>
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      connection:
+      - keep-alive
+      content-length:
+      - '837'
+      content-type:
+      - application/json; charset=utf-8
+      access-control-allow-origin:
+      - "*"
+      cache-control:
+      - no-cache, no-store, must-revalidate, private
+      expires:
+      - '0'
+      pragma:
+      - no-cache
+      timing-allow-origin:
+      - https://www.twitch.tv
+      date:
+      - Sun, 05 Apr 2020 12:57:17 GMT
+      x-served-by:
+      - cache-sea4446-SEA, cache-hel6825-HEL
+      x-cache:
+      - MISS, MISS
+      x-cache-hits:
+      - 0, 0
+      x-timer:
+      - S1586091438.586972,VS0,VS0,VE205
+      vary:
+      - Accept-Encoding
+      strict-transport-security:
+      - max-age=300
+    body:
+      encoding: UTF-8
+      string: '{"created_at":"2019-09-07T14:16:55Z","channel":{"mature":true,"status":"
+        ","broadcaster_language":"ru","broadcaster_software":"unknown_rtmp","display_name":"SAD_SATONT","game":"Dota
+        2","language":"en","_id":128644134,"name":"sad_satont","created_at":"2016-07-05T15:26:30.944267Z","updated_at":"2020-04-05T12:01:15.176781Z","partner":false,"logo":"https://static-cdn.jtvnw.net/jtv_user_pictures/2fc1ef8e-af26-429c-8317-c761f400a255-profile_image-300x300.png","video_banner":null,"profile_banner":"https://static-cdn.jtvnw.net/jtv_user_pictures/bfd3eed0-a6ca-4699-bc7f-8536a3a46212-profile_banner-480.jpeg","profile_banner_background_color":"","url":"https://www.twitch.tv/sad_satont","views":34580,"followers":909,"broadcaster_type":"affiliate","description":"","private_video":false,"privacy_options_enabled":false},"notifications":true}'
+    http_version: null
+  recorded_at: Sun, 05 Apr 2020 12:57:17 GMT
+recorded_with: VCR 5.1.0

@@ -1,290 +1,245 @@
 # Twitch API
 
-This gem simplifies the Twitch-API for ruby users.
+This gem simplifies the Twitch API for Ruby users.
 
+Currently uses [Kraken (5) version](https://dev.twitch.tv/docs/v5) because of
+missing some data in [new (Helix) API](https://dev.twitch.tv/docs/api),
+at least [`User#created_at`](https://github.com/twitchdev/issues/issues/84).
 
 ## Install
 
-With Rails:
+Add this line to your application's Gemfile:
 
 ```ruby
-#add to your Gemfile
-gem 'twitch', '~> 0.1.0'
+gem 'twitch'
 ```
 
-Just irb or pry:
+And then execute:
+
+```
+bundle install
+```
+
+Or install it yourself as:
+
+```
+gem install twitch
+```
+
+## Authentication
+
+You can initialize `Twitch::Client` with or without
+`:access_token` and `:refresh_token`:
 
 ```ruby
-$ gem install twitch
-
-irb > require 'twitch'
-irb > @twitch = Twitch.new()
+twitch_client = Twitch::Client.new(
+  client_id: client_id,
+  client_secret: client_secret,
+  redirect_uri: redirect_uri,
+  scopes: scopes,
+  # access_token: access_token,
+  # refresh_token: refresh_token
+)
 ```
 
-## Changes in 0.1.0 from 0.0.x
-
-Listed below are some changes introduced in version 0.1.0 from 0.0.x. Some of the changes break backward compatibility with previous versions.
-
-```
-- Replaced camelCase method names with snake_case.
-- Removed 'get_' prefix from method names.
-- Made 'your_' prefix optional. (e.g. user() and your_user() are equal)
-```
-
-## Authorizing
-
-Step 1: Get url for your application - (@scope is an array of permissions, like ["user\_read", "channel\_read", "user\_follows_edit"])
+But if you want to make requests depending on `access_token`,
+you should make sure that tokens are actual:
 
 ```ruby
-@twitch = Twitch.new({
-  client_id: @client_id,
-  secret_key: @secret_key,
-  redirect_uri: @redirect_uri,
-  scope: @scope
-})
-
-@twitch.link
+twitch_client.check_tokens! # old tokens if they're actual or new tokens
 ```
 
-Step 2: Authenticate and get access_token (this is done on your @redirect\_url)
+It works like authentication (with a link to login in console)
+if there were no tokens.
+
+Otherwise, `TwitchOAuth2::Error` will be raised.
+
+If you've passed `refresh_token` to initialization and your `access_token`
+is invalid, requests that require `access_token` will automatically refresh it.
+
+Later you can access tokens:
 
 ```ruby
-@twitch = Twitch.new({
-  client_id: @client_id,
-  secret_key: @secret_key,
-  redirect_uri: @redirect_uri,
-  scope: @scope
-})
-
-@data = @twitch.auth(params[:code])
-session[:access_token] = @data[:body]["access_token"]
-```
-
-Step 3: You can now use user token
-
-```ruby
-@twitch = Twitch.new access_token: session["access_token"]
-@yourself = @twitch.your_user()
+twitch_client.tokens # => { access_token: 'abcdef', refresh_token: 'ghijkl' }
+twitch_client.access_token # => 'abcdef'
+twitch_client.refresh_token # => 'ghijkl'
 ```
 
 ## Calls
 
-Calls will return a Hash with :body for the content of the call and a :response
+Calls will return a `Faraday::Response` instance with `#body`
+(parsed and symbolized), `#status`, etc.:
 
 ```ruby
-@twitch.user "day9tv"
+twitch_client.user('day9tv').body
+
+{
+  display_name: 'dustinlakin',
+  logo: nil,
+  created_at: Time.parse('2011-12-18T18:42:09Z'),
+  staff: false,
+  updated_at: Time.parse('2013-02-11T23:48:11Z'),
+  _id: 26883731,
+  name: 'dustinlakin',
+  _links: {
+    self: 'https://api.twitch.tv/kraken/users/dustinlakin'
+  }
+}
 ```
-
-returns:
-
-    {
-     :body=>
-      {"display_name"=>"dustinlakin",
-       "logo"=>nil,
-       "created_at"=>"2011-12-18T18:42:09Z",
-       "staff"=>false,
-       "updated_at"=>"2013-02-11T23:48:11Z",
-       "_id"=>26883731,
-       "name"=>"dustinlakin",
-       "_links"=>{"self"=>"https://api.twitch.tv/kraken/users/dustinlakin"}},
-     :response=>200
-    }
 
 ## Usage
 
 ### Users
 
 ```ruby
-#does not require any access_token 
-# @twitch = Twitch.new()
-@twitch.user "day9tv"
+# `access_token` is not required
+twitch_client.user 'day9tv'
 ```
 
 ----
 
 ```ruby
-#requires access_token, use 
-# @twitch = Twitch.new access_token: session["access_token"]
-@twitch.your_user()
+# `access_token` is required
+twitch_client.your_user
 
 ```
 
 ### Teams
 
 ```ruby
-@twitch.teams()
+twitch_client.teams
 ```
 
 ----
 
 ```ruby
-@twitch.team "eg"
+twitch_client.team 'eg'
 ```
 
 ### Channels
 
 ```ruby
-@twitch.channel "lethalfrag"
-```
-
-```ruby
-@twitch.channel_panels "lethalfrag"
+twitch_client.channel '44322889'
 ```
 
 ----
 
 ```ruby
-#Requires access_token
-@twitch.your_channel
+# `access_token` is required
+twitch_client.your_channel
 ```
 
 ----
 
 ```ruby
-# Requires access_token (and special scope for channel editing)
-#   edit_channel(channelname, status, game)
-#   arguments:
-#    status (string)
-#    game (string)
+# `access_token` and `channel_editor` scope are required
 
-@twitch.edit_channel "ChannelName", "Ranked Solo Queue", "League of Legends"
+twitch_client.update_channel(
+  '44322889',
+  status: 'Ranked Solo Queue',
+  game: 'League of Legends'
+)
 ```
 
 ----
 
 ```ruby
-#Requires access_token (and special scope for channel commercials)
-#   run_commercial(channel, length = 30)
-#   arguments:
-#    channel (string)
-#    length (int)
-#  *this is untested*
+# `access_token` and `channel_commercial` scope are required
+# *this is untested*
 
-@twitch.run_commercial "lethalfrag", 30
+twitch_client.run_commercial 'lethalfrag', 30
 ```
 
 ### Follows
 
-```@twitch.following 'esl_csgo'```
+```ruby
+twitch_client.following 'channel_id'
+```
 
 ----
 
-```@twitch.followed 'esl_csgo'```
+```ruby
+twitch_client.followed 'user_id'
+```
+
+----
+
+```ruby
+twitch_client.follow_status 'user_id', 'channel_id'
+```
 
 
 ### Streams
 
 ```ruby
-@twitch.stream "lethalfrag"
+twitch_client.stream 'lethalfrag'
 ```
 
 ----
 
 ```ruby
-# getStreams(options = {})
-# see Twitch-API for options
-
-@twitch.streams
+twitch_client.streams
 ```
 
 ----
+
 ```ruby
-# getFeaturedStreams(options = {})
-# see Twitch-API for options
+twitch_client.featured_streams
 ```
+
 ----
+
 ```ruby
-@twitch.your_featured_streams
+twitch_client.your_featured_streams
 ```
+
 ----
+
 ```ruby
-#Requires access_token
-@twitch.your_followed_streams
+# `access_token` is required
+twitch_client.your_followed_streams
 ```
 
 ### Games
 
 ```ruby
-@twitch.top_games
+twitch_client.top_games
 ```
 
 ### Search
 
-
 ```ruby
-# search_streams(options = {})
-# see Twitch-API for options
-
-@twitch.search_streams
+twitch_client.search_streams
 ```
 ----
 
 ```ruby
-# search_games(options = {})
-# see Twitch-API for options
-
-@twitch.search_games
+twitch_client.search_games
 ```
 
 ### Videos
 
 
 ```ruby
-# get_channel_videos(channel, options = {})
-# see Twitch-API for options
-
-@twitch.channel_videos "lethalfrag"
+twitch_client.channel_videos 'lethalfrag'
 ```
 
 ----
-```ruby
-# get_video(video_id)
 
-@twitch.video 12345
+```ruby
+twitch_client.video 12345
 ```
 
 ### Adapters
 
-
-To allow the gem to use different HTTP libraries, you can define an Adapter:
-
-```ruby
-require 'open-uri' 
-
-module Twitch
-  module Adapters
-    class OpenURIAdapter < BaseAdapter
-      def self.request(method, url, options={})
-        if (method == :get)
-          ret = {}
-
-          open(url) do |io|
-            ret[:body] = JSON.parse(io.read)
-            ret[:response] = io.status.first.to_i
-          end
-
-          ret
-        end
-      end
-    end # class OpenURIAdapter
-  end # module Adapters
-end # module Twitch
-```
-
-and then pass it into the Twitch class:
+This gem uses [Faraday](https://lostisland.github.io/faraday/),
+which supports different adapters. You can use non-default adapter like:
 
 ```ruby
-@twitch = Twitch.new adapter: Twitch::Adapters::OpenURIAdapter
-
-# or
-
-@twitch = Twitch.new
-@twitch.adapter = Twitch::Adapters::OpenURIAdapter
+Twitch::Client::CONNECTION.adapter :httpclient
 ```
 
-Adapters must be defined inside the Twitch::Adapters module, otherwise they will be considered invalid.
-Any invalid adapter passed to the library will revert to the default adapter.
-
-The default adapter is `Twitch::Adapters::HTTPartyAdapter` which uses the [HTTParty library](https://github.com/jnunemaker/httparty).
+[Faraday Adapters documentation]
+(https://lostisland.github.io/faraday/adapters/).
 
 Feel free to contribute or add functionality!

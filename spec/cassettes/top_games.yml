@@ -1,0 +1,69 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.twitch.tv/kraken/games/top
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.twitchtv.v5+json
+      User-Agent:
+      - Faraday v1.0.1
+      Client-ID:
+      - "<CLIENT_ID>"
+      Authorization:
+      - OAuth <ACTUAL_ACCESS_TOKEN>
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      connection:
+      - keep-alive
+      content-length:
+      - '1130'
+      content-type:
+      - application/json; charset=utf-8
+      access-control-allow-origin:
+      - "*"
+      timing-allow-origin:
+      - https://www.twitch.tv
+      date:
+      - Sun, 05 Apr 2020 12:57:25 GMT
+      x-served-by:
+      - cache-sea4443-SEA, cache-hel6825-HEL
+      x-cache:
+      - MISS, MISS
+      x-cache-hits:
+      - 0, 0
+      x-timer:
+      - S1586091445.345076,VS0,VS0,VE211
+      vary:
+      - Accept-Encoding
+      strict-transport-security:
+      - max-age=300
+    body:
+      encoding: ASCII-8BIT
+      string: '{"_total":2364,"top":[{"game":{"name":"League of Legends","_id":21779,"giantbomb_id":24024,"box":{"large":"https://static-cdn.jtvnw.net/ttv-boxart/League%20of%20Legends-272x380.jpg","medium":"https://static-cdn.jtvnw.net/ttv-boxart/League%20of%20Legends-136x190.jpg","small":"https://static-cdn.jtvnw.net/ttv-boxart/League%20of%20Legends-52x72.jpg","template":"https://static-cdn.jtvnw.net/ttv-boxart/League%20of%20Legends-{width}x{height}.jpg"},"logo":{"large":"https://static-cdn.jtvnw.net/ttv-logoart/League%20of%20Legends-240x144.jpg","medium":"https://static-cdn.jtvnw.net/ttv-logoart/League%20of%20Legends-120x72.jpg","small":"https://static-cdn.jtvnw.net/ttv-logoart/League%20of%20Legends-60x36.jpg","template":"https://static-cdn.jtvnw.net/ttv-logoart/League%20of%20Legends-{width}x{height}.jpg"},"localized_name":"League
+        of Legends","locale":"en-us"},"viewers":279985,"channels":4194},{"game":{"name":"Just
+        Chatting","_id":509658,"giantbomb_id":0,"box":{"large":"https://static-cdn.jtvnw.net/ttv-boxart/Just%20Chatting-272x380.jpg","medium":"https://static-cdn.jtvnw.net/ttv-boxart/Just%20Chatting-136x190.jpg","small":"https://static-cdn.jtvnw.net/ttv-boxart/Just%20Chatting-52x72.jpg","template":"https://static-cdn.jtvnw.net/ttv-boxart/Just%20Chatting-{width}x{height}.jpg"},"logo":{"large":"https://static-cdn.jtvnw.net/ttv-logoart/Just%20Chatting-240x144.jpg","medium":"https://static-cdn.jtvnw.net/ttv-logoart/Just%20Chatting-120x72.jpg","small":"https://static-cdn.jtvnw.net/ttv-logoart/Just%20Chatting-60x36.jpg","template":"https://static-cdn.jtvnw.net/ttv-logoart/Just%20Chatting-{width}x{height}.jpg"},"localized_name":"Just
+        Chatting","locale":"en-us"},"viewers":222036,"channels":2727},{"game":{"name":"Counter-Strike:
+        Global Offensive","_id":32399,"giantbomb_id":36113,"box":{"large":"https://static-cdn.jtvnw.net/ttv-boxart/./Counter-Strike:%20Global%20Offensive-272x380.jpg","medium":"https://static-cdn.jtvnw.net/ttv-boxart/./Counter-Strike:%20Global%20Offensive-136x190.jpg","small":"https://static-cdn.jtvnw.net/ttv-boxart/./Counter-Strike:%20Global%20Offensive-52x72.jpg","template":"https://static-cdn.jtvnw.net/ttv-boxart/./Counter-Strike:%20Global%20Offensive-{width}x{height}.jpg"},"logo":{"large":"https://static-cdn.jtvnw.net/ttv-logoart/./Counter-Strike:%20Global%20Offensive-240x144.jpg","medium":"https://static-cdn.jtvnw.net/ttv-logoart/./Counter-Strike:%20Global%20Offensive-120x72.jpg","small":"https://static-cdn.jtvnw.net/ttv-logoart/./Counter-Strike:%20Global%20Offensive-60x36.jpg","template":"https://static-cdn.jtvnw.net/ttv-logoart/./Counter-Strike:%20Global%20Offensive-{width}x{height}.jpg"},"localized_name":"Counter-Strike:
+        Global Offensive","locale":"en-us"},"viewers":198606,"channels":2593},{"game":{"name":"Dota
+        2","_id":29595,"giantbomb_id":32887,"box":{"large":"https://static-cdn.jtvnw.net/ttv-boxart/Dota%202-272x380.jpg","medium":"https://static-cdn.jtvnw.net/ttv-boxart/Dota%202-136x190.jpg","small":"https://static-cdn.jtvnw.net/ttv-boxart/Dota%202-52x72.jpg","template":"https://static-cdn.jtvnw.net/ttv-boxart/Dota%202-{width}x{height}.jpg"},"logo":{"large":"https://static-cdn.jtvnw.net/ttv-logoart/Dota%202-240x144.jpg","medium":"https://static-cdn.jtvnw.net/ttv-logoart/Dota%202-120x72.jpg","small":"https://static-cdn.jtvnw.net/ttv-logoart/Dota%202-60x36.jpg","template":"https://static-cdn.jtvnw.net/ttv-logoart/Dota%202-{width}x{height}.jpg"},"localized_name":"Dota
+        2","locale":"en-us"},"viewers":118453,"channels":1162},{"game":{"name":"Call
+        of Duty: Modern Warfare","_id":512710,"giantbomb_id":73517,"box":{"large":"https://static-cdn.jtvnw.net/ttv-boxart/./Call%20of%20Duty:%20Modern%20Warfare-272x380.jpg","medium":"https://static-cdn.jtvnw.net/ttv-boxart/./Call%20of%20Duty:%20Modern%20Warfare-136x190.jpg","small":"https://static-cdn.jtvnw.net/ttv-boxart/./Call%20of%20Duty:%20Modern%20Warfare-52x72.jpg","template":"https://static-cdn.jtvnw.net/ttv-boxart/./Call%20of%20Duty:%20Modern%20Warfare-{width}x{height}.jpg"},"logo":{"large":"https://static-cdn.jtvnw.net/ttv-logoart/./Call%20of%20Duty:%20Modern%20Warfare-240x144.jpg","medium":"https://static-cdn.jtvnw.net/ttv-logoart/./Call%20of%20Duty:%20Modern%20Warfare-120x72.jpg","small":"https://static-cdn.jtvnw.net/ttv-logoart/./Call%20of%20Duty:%20Modern%20Warfare-60x36.jpg","template":"https://static-cdn.jtvnw.net/ttv-logoart/./Call%20of%20Duty:%20Modern%20Warfare-{width}x{height}.jpg"},"localized_name":"Call
+        of Duty: Modern Warfare","locale":"en-us"},"viewers":69756,"channels":4587},{"game":{"name":"Fortnite","_id":33214,"giantbomb_id":37030,"box":{"large":"https://static-cdn.jtvnw.net/ttv-boxart/Fortnite-272x380.jpg","medium":"https://static-cdn.jtvnw.net/ttv-boxart/Fortnite-136x190.jpg","small":"https://static-cdn.jtvnw.net/ttv-boxart/Fortnite-52x72.jpg","template":"https://static-cdn.jtvnw.net/ttv-boxart/Fortnite-{width}x{height}.jpg"},"logo":{"large":"https://static-cdn.jtvnw.net/ttv-logoart/Fortnite-240x144.jpg","medium":"https://static-cdn.jtvnw.net/ttv-logoart/Fortnite-120x72.jpg","small":"https://static-cdn.jtvnw.net/ttv-logoart/Fortnite-60x36.jpg","template":"https://static-cdn.jtvnw.net/ttv-logoart/Fortnite-{width}x{height}.jpg"},"localized_name":"Fortnite","locale":"en-us"},"viewers":62902,"channels":6452},{"game":{"name":"Animal
+        Crossing: New Horizons","_id":509538,"giantbomb_id":70241,"box":{"large":"https://static-cdn.jtvnw.net/ttv-boxart/./Animal%20Crossing:%20New%20Horizons-272x380.jpg","medium":"https://static-cdn.jtvnw.net/ttv-boxart/./Animal%20Crossing:%20New%20Horizons-136x190.jpg","small":"https://static-cdn.jtvnw.net/ttv-boxart/./Animal%20Crossing:%20New%20Horizons-52x72.jpg","template":"https://static-cdn.jtvnw.net/ttv-boxart/./Animal%20Crossing:%20New%20Horizons-{width}x{height}.jpg"},"logo":{"large":"https://static-cdn.jtvnw.net/ttv-logoart/./Animal%20Crossing:%20New%20Horizons-240x144.jpg","medium":"https://static-cdn.jtvnw.net/ttv-logoart/./Animal%20Crossing:%20New%20Horizons-120x72.jpg","small":"https://static-cdn.jtvnw.net/ttv-logoart/./Animal%20Crossing:%20New%20Horizons-60x36.jpg","template":"https://static-cdn.jtvnw.net/ttv-logoart/./Animal%20Crossing:%20New%20Horizons-{width}x{height}.jpg"},"localized_name":"Animal
+        Crossing: New Horizons","locale":"en-us"},"viewers":58551,"channels":733},{"game":{"name":"Grand
+        Theft Auto V","_id":32982,"giantbomb_id":36765,"box":{"large":"https://static-cdn.jtvnw.net/ttv-boxart/Grand%20Theft%20Auto%20V-272x380.jpg","medium":"https://static-cdn.jtvnw.net/ttv-boxart/Grand%20Theft%20Auto%20V-136x190.jpg","small":"https://static-cdn.jtvnw.net/ttv-boxart/Grand%20Theft%20Auto%20V-52x72.jpg","template":"https://static-cdn.jtvnw.net/ttv-boxart/Grand%20Theft%20Auto%20V-{width}x{height}.jpg"},"logo":{"large":"https://static-cdn.jtvnw.net/ttv-logoart/Grand%20Theft%20Auto%20V-240x144.jpg","medium":"https://static-cdn.jtvnw.net/ttv-logoart/Grand%20Theft%20Auto%20V-120x72.jpg","small":"https://static-cdn.jtvnw.net/ttv-logoart/Grand%20Theft%20Auto%20V-60x36.jpg","template":"https://static-cdn.jtvnw.net/ttv-logoart/Grand%20Theft%20Auto%20V-{width}x{height}.jpg"},"localized_name":"Grand
+        Theft Auto V","locale":"en-us"},"viewers":47851,"channels":1328},{"game":{"name":"Last
+        Oasis","_id":512969,"giantbomb_id":73785,"box":{"large":"https://static-cdn.jtvnw.net/ttv-boxart/Last%20Oasis-272x380.jpg","medium":"https://static-cdn.jtvnw.net/ttv-boxart/Last%20Oasis-136x190.jpg","small":"https://static-cdn.jtvnw.net/ttv-boxart/Last%20Oasis-52x72.jpg","template":"https://static-cdn.jtvnw.net/ttv-boxart/Last%20Oasis-{width}x{height}.jpg"},"logo":{"large":"https://static-cdn.jtvnw.net/ttv-logoart/Last%20Oasis-240x144.jpg","medium":"https://static-cdn.jtvnw.net/ttv-logoart/Last%20Oasis-120x72.jpg","small":"https://static-cdn.jtvnw.net/ttv-logoart/Last%20Oasis-60x36.jpg","template":"https://static-cdn.jtvnw.net/ttv-logoart/Last%20Oasis-{width}x{height}.jpg"},"localized_name":"Last
+        Oasis","locale":"en-us"},"viewers":44715,"channels":356},{"game":{"name":"Mount
+        \u0026 Blade II: Bannerlord","_id":68351,"giantbomb_id":39861,"box":{"large":"https://static-cdn.jtvnw.net/ttv-boxart/./Mount%20\u0026%20Blade%20II:%20Bannerlord-272x380.jpg","medium":"https://static-cdn.jtvnw.net/ttv-boxart/./Mount%20\u0026%20Blade%20II:%20Bannerlord-136x190.jpg","small":"https://static-cdn.jtvnw.net/ttv-boxart/./Mount%20\u0026%20Blade%20II:%20Bannerlord-52x72.jpg","template":"https://static-cdn.jtvnw.net/ttv-boxart/./Mount%20\u0026%20Blade%20II:%20Bannerlord-{width}x{height}.jpg"},"logo":{"large":"https://static-cdn.jtvnw.net/ttv-logoart/./Mount%20\u0026%20Blade%20II:%20Bannerlord-240x144.jpg","medium":"https://static-cdn.jtvnw.net/ttv-logoart/./Mount%20\u0026%20Blade%20II:%20Bannerlord-120x72.jpg","small":"https://static-cdn.jtvnw.net/ttv-logoart/./Mount%20\u0026%20Blade%20II:%20Bannerlord-60x36.jpg","template":"https://static-cdn.jtvnw.net/ttv-logoart/./Mount%20\u0026%20Blade%20II:%20Bannerlord-{width}x{height}.jpg"},"localized_name":"Mount
+        \u0026 Blade II: Bannerlord","locale":"en-us"},"viewers":41719,"channels":512}]}'
+    http_version: null
+  recorded_at: Sun, 05 Apr 2020 12:57:25 GMT
+recorded_with: VCR 5.1.0

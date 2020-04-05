@@ -1,10 +1,5 @@
+# frozen_string_literal: true
 
 module Twitch
-  module VERSION
-    MAJOR = 0
-    MINOR = 1
-    TINY  = 3
-
-    STRING = [MAJOR, MINOR, TINY].compact.join(".")
-  end
+  VERSION = '0.1.3'
 end

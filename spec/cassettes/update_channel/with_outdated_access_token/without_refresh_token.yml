@@ -1,0 +1,97 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: https://api.twitch.tv/kraken/channels/277558749
+    body:
+      encoding: UTF-8
+      string: '{"channel":{"status":"Changing API","game":"Diablo III"}}'
+    headers:
+      Accept:
+      - application/vnd.twitchtv.v5+json
+      User-Agent:
+      - Faraday v1.0.1
+      Client-ID:
+      - "<CLIENT_ID>"
+      Authorization:
+      - OAuth 9y7bf00r4fof71czggal1e2wlo50q3
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      connection:
+      - keep-alive
+      content-length:
+      - '69'
+      content-type:
+      - application/json; charset=utf-8
+      access-control-allow-origin:
+      - "*"
+      cache-control:
+      - no-cache, no-store, must-revalidate, private
+      expires:
+      - '0'
+      pragma:
+      - no-cache
+      timing-allow-origin:
+      - https://www.twitch.tv
+      date:
+      - Sun, 05 Apr 2020 12:57:12 GMT
+      x-served-by:
+      - cache-sea4469-SEA, cache-hel6828-HEL
+      x-cache:
+      - MISS, MISS
+      x-cache-hits:
+      - 0, 0
+      x-timer:
+      - S1586091433.615462,VS0,VS0,VE198
+      vary:
+      - Accept-Encoding
+      strict-transport-security:
+      - max-age=300
+    body:
+      encoding: UTF-8
+      string: '{"error":"Unauthorized","status":401,"message":"invalid oauth token"}'
+    http_version: null
+  recorded_at: Sun, 05 Apr 2020 12:57:12 GMT
+- request:
+    method: post
+    uri: https://id.twitch.tv/oauth2/token
+    body:
+      encoding: UTF-8
+      string: client_id=<CLIENT_ID>&client_secret=<CLIENT_SECRET>&grant_type=refresh_token&refresh_token
+    headers:
+      User-Agent:
+      - Faraday v1.0.1
+      Content-Type:
+      - application/x-www-form-urlencoded
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      date:
+      - Sun, 05 Apr 2020 12:57:13 GMT
+      content-type:
+      - application/json
+      content-length:
+      - '49'
+      connection:
+      - keep-alive
+      server:
+      - nginx/1.14.1
+      access-control-allow-origin:
+      - "*"
+      x-ctxlog-logid:
+      - 1-5e89d5a9-583dc9dae63ffe5864ef3808
+    body:
+      encoding: UTF-8
+      string: '{"status":400,"message":"missing refresh token"}
+
+        '
+    http_version: null
+  recorded_at: Sun, 05 Apr 2020 12:57:13 GMT
+recorded_with: VCR 5.1.0
