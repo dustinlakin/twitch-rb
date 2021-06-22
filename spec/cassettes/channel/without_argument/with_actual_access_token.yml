@@ -1,0 +1,59 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.twitch.tv/kraken/channel
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.twitchtv.v5+json
+      User-Agent:
+      - Faraday v1.0.1
+      Client-ID:
+      - "<CLIENT_ID>"
+      Authorization:
+      - OAuth <ACTUAL_ACCESS_TOKEN>
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      connection:
+      - keep-alive
+      content-length:
+      - '770'
+      content-type:
+      - application/json; charset=utf-8
+      access-control-allow-origin:
+      - "*"
+      cache-control:
+      - no-cache, no-store, must-revalidate, private
+      expires:
+      - '0'
+      pragma:
+      - no-cache
+      timing-allow-origin:
+      - https://www.twitch.tv
+      date:
+      - Sun, 05 Apr 2020 12:57:07 GMT
+      x-served-by:
+      - cache-sea4478-SEA, cache-hel6830-HEL
+      x-cache:
+      - MISS, MISS
+      x-cache-hits:
+      - 0, 0
+      x-timer:
+      - S1586091427.438446,VS0,VS0,VE238
+      vary:
+      - Accept-Encoding
+      strict-transport-security:
+      - max-age=300
+    body:
+      encoding: UTF-8
+      string: '{"mature":false,"status":"Changing API","broadcaster_language":"en","broadcaster_software":"","display_name":"StreamAssistantBot","game":"Diablo
+        III","language":"en","_id":"277558749","name":"streamassistantbot","created_at":"2018-11-23T20:32:14Z","updated_at":"2020-04-05T09:21:53Z","partner":false,"logo":"https://static-cdn.jtvnw.net/jtv_user_pictures/cbde4ea7-7186-4128-866d-bba7c5c479c3-profile_image-300x300.png","video_banner":null,"profile_banner":null,"profile_banner_background_color":null,"url":"https://www.twitch.tv/streamassistantbot","views":0,"followers":0,"broadcaster_type":"","description":"","private_video":false,"privacy_options_enabled":false,"stream_key":"live_277558749_1TyAT3zTzSdHhoHZ0HQkiEgInRjVMo","email":"stream.assistant.bot@outlook.com"}'
+    http_version: null
+  recorded_at: Sun, 05 Apr 2020 12:57:07 GMT
+recorded_with: VCR 5.1.0

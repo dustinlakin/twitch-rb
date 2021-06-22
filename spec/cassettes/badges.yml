@@ -1,0 +1,58 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.twitch.tv/kraken/chat/44322889/badges
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.twitchtv.v5+json
+      User-Agent:
+      - Faraday v1.0.1
+      Client-ID:
+      - "<CLIENT_ID>"
+      Authorization:
+      - OAuth <ACTUAL_ACCESS_TOKEN>
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      connection:
+      - keep-alive
+      content-length:
+      - '1234'
+      content-type:
+      - application/json; charset=utf-8
+      access-control-allow-origin:
+      - "*"
+      cache-control:
+      - no-cache, no-store, must-revalidate, private
+      expires:
+      - '0'
+      pragma:
+      - no-cache
+      timing-allow-origin:
+      - https://www.twitch.tv
+      date:
+      - Sun, 05 Apr 2020 12:57:16 GMT
+      x-served-by:
+      - cache-sea4479-SEA, cache-hel6824-HEL
+      x-cache:
+      - MISS, MISS
+      x-cache-hits:
+      - 0, 0
+      x-timer:
+      - S1586091436.830481,VS0,VS0,VE201
+      vary:
+      - Accept-Encoding
+      strict-transport-security:
+      - max-age=300
+    body:
+      encoding: UTF-8
+      string: '{"global_mod":{"alpha":"https://static-cdn.jtvnw.net/chat-badges/globalmod-alpha.png","image":"https://static-cdn.jtvnw.net/chat-badges/globalmod.png","svg":"https://static-cdn.jtvnw.net/chat-badges/globalmod.svg"},"admin":{"alpha":"https://static-cdn.jtvnw.net/chat-badges/admin-alpha.png","image":"https://static-cdn.jtvnw.net/chat-badges/admin.png","svg":"https://static-cdn.jtvnw.net/chat-badges/admin.svg"},"broadcaster":{"alpha":"https://static-cdn.jtvnw.net/chat-badges/broadcaster-alpha.png","image":"https://static-cdn.jtvnw.net/chat-badges/broadcaster.png","svg":"https://static-cdn.jtvnw.net/chat-badges/broadcaster.svg"},"mod":{"alpha":"https://static-cdn.jtvnw.net/chat-badges/mod-alpha.png","image":"https://static-cdn.jtvnw.net/chat-badges/mod.png","svg":"https://static-cdn.jtvnw.net/chat-badges/mod.svg"},"staff":{"alpha":"https://static-cdn.jtvnw.net/chat-badges/staff-alpha.png","image":"https://static-cdn.jtvnw.net/chat-badges/staff.png","svg":"https://static-cdn.jtvnw.net/chat-badges/staff.svg"},"turbo":{"alpha":"https://static-cdn.jtvnw.net/chat-badges/turbo-alpha.png","image":"https://static-cdn.jtvnw.net/chat-badges/turbo.png","svg":"https://static-cdn.jtvnw.net/chat-badges/turbo.svg"},"subscriber":null}'
+    http_version: null
+  recorded_at: Sun, 05 Apr 2020 12:57:16 GMT
+recorded_with: VCR 5.1.0

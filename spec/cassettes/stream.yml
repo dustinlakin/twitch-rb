@@ -1,0 +1,61 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.twitch.tv/kraken/streams/44741426
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.twitchtv.v5+json
+      User-Agent:
+      - Faraday v1.0.1
+      Client-ID:
+      - "<CLIENT_ID>"
+      Authorization:
+      - OAuth <ACTUAL_ACCESS_TOKEN>
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      connection:
+      - keep-alive
+      content-length:
+      - '805'
+      content-type:
+      - application/json; charset=utf-8
+      access-control-allow-origin:
+      - "*"
+      cache-control:
+      - no-cache, no-store, must-revalidate, private
+      expires:
+      - '0'
+      pragma:
+      - no-cache
+      timing-allow-origin:
+      - https://www.twitch.tv
+      date:
+      - Sun, 05 Apr 2020 12:57:13 GMT
+      x-served-by:
+      - cache-sea4440-SEA, cache-hel6834-HEL
+      x-cache:
+      - MISS, MISS
+      x-cache-hits:
+      - 0, 0
+      x-timer:
+      - S1586091434.796940,VS0,VS0,VE199
+      vary:
+      - Accept-Encoding
+      strict-transport-security:
+      - max-age=300
+    body:
+      encoding: ASCII-8BIT
+      string: '{"stream":{"_id":37392938416,"game":"Tom Clancy''s The Division 2","broadcast_platform":"live","community_id":"","community_ids":[],"viewers":654,"video_height":1080,"average_fps":60,"delay":0,"created_at":"2020-04-05T04:39:30Z","is_playlist":false,"stream_type":"live","preview":{"small":"https://static-cdn.jtvnw.net/previews-ttv/live_user_streamerhouse-80x45.jpg","medium":"https://static-cdn.jtvnw.net/previews-ttv/live_user_streamerhouse-320x180.jpg","large":"https://static-cdn.jtvnw.net/previews-ttv/live_user_streamerhouse-640x360.jpg","template":"https://static-cdn.jtvnw.net/previews-ttv/live_user_streamerhouse-{width}x{height}.jpg"},"channel":{"mature":false,"status":"[24/7
+        LIVE] the grind for loot - Safer @ Home Support Group","broadcaster_language":"en","broadcaster_software":"","display_name":"StreamerHouse","game":"Tom
+        Clancy''s The Division 2","language":"en","_id":44741426,"name":"streamerhouse","created_at":"2013-06-14T15:50:41.377211Z","updated_at":"2020-04-05T12:30:41.088169Z","partner":true,"logo":"https://static-cdn.jtvnw.net/jtv_user_pictures/1e6654c9-aa39-4cf2-a745-d59b779862d8-profile_image-300x300.png","video_banner":"https://static-cdn.jtvnw.net/jtv_user_pictures/streamerhouse-channel_offline_image-643a63b6ee788b02-1920x1080.jpeg","profile_banner":"https://static-cdn.jtvnw.net/jtv_user_pictures/74d167c7-0a68-466d-82d4-9e4a0e1dcff1-profile_banner-480.png","profile_banner_background_color":"#ffffff","url":"https://www.twitch.tv/streamerhouse","views":57282456,"followers":628241,"broadcaster_type":"","description":"Twitch''s
+        Only Live 24/7 Gaming House!  http://Facebook.com/StreamerHouse http://Youtube.com/StreamerHouse","private_video":false,"privacy_options_enabled":false}}}'
+    http_version: null
+  recorded_at: Sun, 05 Apr 2020 12:57:14 GMT
+recorded_with: VCR 5.1.0

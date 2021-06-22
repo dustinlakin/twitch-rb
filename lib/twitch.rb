@@ -1,10 +1,4 @@
-require 'twitch/adapters'
-require 'twitch/client'
-require 'twitch/request'
-require 'twitch/version'
+# frozen_string_literal: true
 
-module Twitch
-  def self.new(options={})
-    Twitch::Client.new(options)
-  end
-end
+require_relative 'twitch/client'
+require_relative 'twitch/version'

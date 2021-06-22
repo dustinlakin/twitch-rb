@@ -1,424 +1,327 @@
-require 'twitch/request'
-require 'twitch/adapters'
+# frozen_string_literal: true
+
+require 'faraday'
+require 'faraday_middleware'
+require 'twitch_oauth2'
+
+require_relative 'server_error'
+
+require 'retriable'
+Retriable.configure do |config|
+  config.contexts[:twitch] = {
+    on: [
+      Errno::ETIMEDOUT,
+      SocketError,
+      Faraday::ConnectionFailed,
+      Faraday::TimeoutError,
+      Twitch::ServerError
+    ],
+    ## It will last for 42 minutes max (remember about `rand_factor`, default is `0.5`),
+    ## the last interval is 21 minutes max
+    tries: 10,
+    base_interval: 5,
+    multiplier: 2,
+    max_interval: 30 * 60, ## 30 minutes
+    max_elapsed_time: 60 * 60 ## 1 hour
+  }
+end
 
 module Twitch
   class Client
-    include Twitch::Request
-    include Twitch::Adapters
+    DEFAULT_CONNECTION = Faraday.new(
+      url: 'https://api.twitch.tv/kraken',
+      headers: {
+        'Accept' => 'application/vnd.twitchtv.v5+json'
+      }
+    ) do |connection|
+      connection.request :json
+
+      connection.response :dates
+      connection.response :json, content_type: /\bjson$/, parser_options: { symbolize_names: true }
+    end.freeze
+
+    private_constant :DEFAULT_CONNECTION
+
+    attr_reader :connection, :tokens
 
     def initialize(options = {})
-      @client_id = options[:client_id] || nil
-      @secret_key = options[:secret_key] || nil
-      @redirect_uri = options[:redirect_uri] || nil
-      @scope = options[:scope] || nil
-      @access_token = options[:access_token] || nil
+      @client_id = options[:client_id]
 
-      @adapter = get_adapter(options[:adapter] || nil)
+      @oauth2_client = TwitchOAuth2::Client.new(
+        client_id: @client_id,
+        **options.slice(:client_secret, :redirect_uri, :scopes)
+      )
 
-      @base_url = "https://api.twitch.tv/kraken"
-      @alt_base_url = "https://api.twitch.tv/api"
+      @tokens = options.slice(:access_token, :refresh_token)
+
+      @connection = options.fetch(:connection, DEFAULT_CONNECTION.dup)
+      connection.headers['Client-ID'] = @client_id
+
+      renew_authorization_header if access_token
     end
 
-    attr_reader :base_url, :redirect_url, :scope
-    attr_accessor :adapter
-
-    public
-
-    def adapter=(adapter)
-      get_adapter(adapter)
+    %i[access_token refresh_token].each do |key|
+      define_method key do
+        tokens[key]
+      end
     end
 
-    def link
-      scope = ""
-      @scope.each { |s| scope += s + '+' }
-      "#{@base_url}/oauth2/authorize?response_type=code&client_id=#{@client_id}&redirect_uri=#{@redirect_uri}&scope=#{scope}"
-    end
-
-    def auth(code)
-      path = "/oauth2/token"
-      url = @base_url + path
-      post(url, {
-        :client_id => @client_id,
-        :client_secret => @secret_key,
-        :grant_type => "authorization_code",
-        :redirect_uri => @redirect_uri,
-        :code => code
-      })
+    def check_tokens!
+      @tokens = @oauth2_client.check_tokens(**tokens)
     end
 
     # User
 
-    def user(user = nil)
-      return your_user unless user
+    def user(user_id = nil)
+      return your_user unless user_id
 
-      path = "/users/"
-      url = @base_url + path + user;
-
-      get(url)
+      request :get, "users/#{user_id}"
     end
 
     def your_user
-      return false unless @access_token
+      require_access_token do
+        request :get, 'user'
+      end
+    end
 
-      path = "/user?oauth_token=#{@access_token}"
-      url = @base_url + path
-
-      get(url)
+    def users(*logins)
+      request :get, 'users', login: logins.join(',')
     end
 
     # Teams
 
     def teams
-      path = "/teams/"
-      url = @base_url + path;
-
-      get(url)
+      request :get, 'teams'
     end
 
-
     def team(team_id)
-      path = "/teams/"
-      url = @base_url + path + team_id;
-
-      get(url)
+      request :get, "teams/#{team_id}"
     end
 
     # Channel
 
-    def channel(channel = nil)
-      return your_channel unless channel
+    def channel(channel_id = nil)
+      return your_channel unless channel_id
 
-      path = "/channels/"
-      url = @base_url + path + channel;
-
-      get(url)
-    end
-
-    def channel_panels(channel = nil)
-      return nil if channel.nil?
-
-      path = "/channels/#{channel}/panels"
-      url = @alt_base_url + path;
-
-      get(url)
+      request :get, "channels/#{channel_id}"
     end
 
     def your_channel
-      return false unless @access_token
-
-      path = "/channel?oauth_token=#{@access_token}"
-      url = @base_url + path;
-
-      get(url)
+      require_access_token do
+        request :get, 'channel'
+      end
     end
 
     def editors(channel)
-      return false unless @access_token
-
-      path = "/channels/#{channel}/editors?oauth_token=#{@access_token}"
-      url = @base_url + path;
-
-      get(url)
+      require_access_token do
+        request :get, "channels/#{channel}/editors"
+      end
     end
 
-    # TODO: Add ability to set delay, which is only available for partered channels
-    def edit_channel(channel, status, game)
-      return false unless @access_token
-
-      path = "/channels/#{channel}/?oauth_token=#{@access_token}"
-      url = @base_url + path
-      data = {
-        :channel =>{
-          :game => game,
-          :status => status
-        }
-      }
-      put(url, data)
+    def update_channel(channel_id, options)
+      require_access_token do
+        request :put, "channels/#{channel_id}", channel: options
+      end
     end
 
     def reset_key(channel)
-      return false unless @access_token
-
-      path = "/channels/#{channel}/stream_key?oauth_token=#{@access_token}"
-      url = @base_url + path
-      delete(url)
+      require_access_token do
+        request :delete, "channels/#{channel}/stream_key"
+      end
     end
 
     def follow_channel(username, channel)
-      return false unless @access_token
-
-      path = "/users/#{username}/follows/channels/#{channel}?oauth_token=#{@access_token}"
-      url = @base_url + path
-      put(url)
+      require_access_token do
+        request :put, "users/#{username}/follows/channels/#{channel}"
+      end
     end
 
     def unfollow_channel(username, channel)
-      return false unless @access_token
-
-      path = "/users/#{username}/follows/channels/#{channel}?oauth_token=#{@access_token}"
-      url = @base_url + path
-      delete(url)
+      require_access_token do
+        request :delete, "users/#{username}/follows/channels/#{channel}"
+      end
     end
 
     def run_commercial(channel, length = 30)
-      return false unless @access_token
-
-      path = "/channels/#{channel}/commercial?oauth_token=#{@access_token}"
-      url = @base_url + path
-      post(url, {
-        :length => length
-      })
+      require_access_token do
+        request :post, "channels/#{channel}/commercial", length: length
+      end
     end
 
     def channel_teams(channel)
-      return false unless @access_token
-
-      path = "/channels/#{channel}/teams?oauth_token=#{@access_token}"
-      url = @base_url + path;
-
-      get(url)
+      require_access_token do
+        request :get, "channels/#{channel}/teams"
+      end
     end
 
     # Streams
 
-    def stream(stream_name)
-      path = "/streams/#{stream_name}"
-      url = @base_url + path;
-
-      get(url)
+    def stream(channel_id, options = {})
+      request :get, "streams/#{channel_id}", options
     end
 
     def streams(options = {})
-      query = build_query_string(options)
-      path = "/streams"
-      url =  @base_url + path + query
-
-      get(url)
+      request :get, 'streams', options
     end
 
     def featured_streams(options = {})
-      query = build_query_string(options)
-      path = "/streams/featured"
-      url = @base_url + path + query
-
-      get(url)
+      request :get, 'streams/featured', options
     end
 
     def summarized_streams(options = {})
-      query = build_query_string(options)
-      path = "/streams/summary"
-      url = @base_url + path + query
-
-      get(url)
+      request :get, 'streams/summary', options
     end
 
     def followed_streams(options = {})
-      return false unless @access_token
-
-      options[:oauth_token] = @access_token
-      query = build_query_string(options)
-      path = "/streams/followed"
-      url = @base_url + path + query
-
-      get(url)
+      require_access_token do
+        request :get, 'streams/followed', options
+      end
     end
-    alias :your_followed_streams :followed_streams
+    alias your_followed_streams followed_streams
 
-    #Games
+    # Games
 
     def top_games(options = {})
-      query = build_query_string(options)
-      path = "/games/top"
-      url = @base_url + path + query
-
-      get(url)
+      request :get, 'games/top', options
     end
 
-    #Search
+    # Search
 
     def search_channels(options = {})
-      query = build_query_string(options)
-      path = "/search/channels"
-      url = @base_url + path + query
-
-      get(url)
+      request :get, 'search/channels', options
     end
 
     def search_streams(options = {})
-      query = build_query_string(options)
-      path = "/search/streams"
-      url = @base_url + path + query
-
-      get(url)
+      request :get, 'search/streams', options
     end
 
     def search_games(options = {})
-      query = build_query_string(options)
-      path = "/search/games"
-      url = @base_url + path + query
-
-      get(url)
+      request :get, 'search/games', options
     end
 
     # Videos
 
     def channel_videos(channel, options = {})
-      query = build_query_string(options)
-      path = "/channels/#{channel}/videos"
-      url = @base_url + path + query
-
-      get(url)
+      request :get, "channels/#{channel}/videos", options
     end
 
     def video(video_id)
-      path = "/videos/#{video_id}/"
-      url = @base_url + path
-
-      get(url)
+      request :get, "videos/#{video_id}"
     end
 
     def subscribed?(username, channel, options = {})
-      options[:oauth_token] = @access_token
-      query = build_query_string(options)
-      path = "/users/#{username}/subscriptions/#{channel}"
-      url = @base_url + path + query
-
-      get(url)
+      request :get, "users/#{username}/subscriptions/#{channel}", options
     end
 
-    def followed_videos(options ={})
-      return false unless @access_token
-
-      options[:oauth_token] = @access_token
-      query = build_query_string(options)
-      path = "/videos/followed"
-      url = @base_url + path + query
-
-      get(url)
+    def followed_videos(options = {})
+      require_access_token do
+        request :get, 'videos/followed', options
+      end
     end
-    alias :your_followed_videos :followed_videos
+    alias your_followed_videos followed_videos
 
     def top_videos(options = {})
-      query = build_query_string(options)
-      path = "/videos/top"
-      url = @base_url + path + query
-
-      get(url)
+      request :get, 'videos/top', options
     end
 
     # Blocks
 
     def blocks(username, options = {})
-      options[:oauth_token] = @access_token
-      query = build_query_string(options)
-      path = "/users/#{username}/blocks"
-      url = @base_url + path + query
-
-      get(url)
+      request :get, "users/#{username}/blocks", options
     end
 
     def block_user(username, target)
-      return false unless @access_token
-
-      path = "/users/#{username}/blocks/#{target}?oauth_token=#{@access_token}"
-      url = @base_url + path
-      put(url)
+      require_access_token do
+        request :put, "users/#{username}/blocks/#{target}"
+      end
     end
 
     def unblock_user(username, target)
-      return false unless @access_token
-
-      path = "/users/#{username}/blocks/#{target}?oauth_token=#{@access_token}"
-      url = @base_url + path
-      delete(url)
+      require_access_token do
+        request :delete, "users/#{username}/blocks/#{target}"
+      end
     end
 
     # Chat
 
-    def chat_links(channel)
-      path = "/chat/"
-      url = @base_url + path + channel;
-
-      get(url)
+    def badges(channel_id)
+      request :get, "chat/#{channel_id}/badges"
     end
 
-    def badges(channel)
-      path = "/chat/#{channel}/badges"
-      url = @base_url + path;
-
-      get(url)
-    end
-
-    def emoticons()
-      path = "/chat/emoticons"
-      url = @base_url + path;
-
-      get(url)
+    def emoticons
+      request :get, 'chat/emoticons' do |request|
+        request.headers.delete 'Authorization'
+      end
     end
 
     # Follows
 
-    def following(channel, options = {})
-      query = build_query_string(options)
-      path = "/channels/#{channel}/follows"
-      url = @base_url + path + query;
-
-      get(url)
+    def following(channel_id, options = {})
+      request :get, "channels/#{channel_id}/follows", options
     end
 
-    def followed(username, options = {})
-      query = build_query_string(options)
-      path = "/users/#{username}/follows/channels"
-      url = @base_url + path + query
-
-      get(url)
+    def followed(user_id, options = {})
+      request :get, "users/#{user_id}/follows/channels", options
     end
 
-    def follow_status(username, channel)
-      path = "/users/#{username}/follows/channels/#{channel}/?oauth_token=#{@access_token}"
-      url = @base_url + path;
-
-      get(url)
+    def follow_status(user_id, channel_id)
+      request :get, "users/#{user_id}/follows/channels/#{channel_id}"
     end
 
     # Ingests
 
-    def ingests()
-      path = "/ingests"
-      url = @base_url + path
-
-      get(url)
+    def ingests
+      request :get, 'ingests'
     end
 
     # Root
 
-    def root()
-      path = "/?oauth_token=#{@access_token}"
-      url = @base_url + path
-
-      get(url)
+    def root
+      request :get, ''
     end
 
     # Subscriptions
 
     def subscribed(channel, options = {})
-      return false unless @access_token
-      options[:oauth_token] = @access_token
-
-      query = build_query_string(options)
-      path = "/channels/#{channel}/subscriptions"
-      url = @base_url + path + query
-
-      get(url)
+      require_access_token do
+        request :get, "channels/#{channel}/subscriptions", options
+      end
     end
 
     def subscribed_to_channel(username, channel)
-      return false unless @access_token
+      require_access_token do
+        request :get, "channels/#{channel}/subscriptions/#{username}"
+      end
+    end
 
-      path = "/channels/#{channel}/subscriptions/#{username}?oauth_token=#{@access_token}"
-      url = @base_url + path
+    private
 
-      get(url)
+    def renew_authorization_header
+      connection.headers['Authorization'] = "OAuth #{access_token}"
+    end
+
+    def request(http_method, *args)
+      Retriable.with_context(:twitch) do
+        response = connection.public_send http_method, *args
+
+        raise ServerError.new(response.status) if response.status.between?(500, 599)
+
+        response
+      end
+    end
+
+    def require_access_token
+      response = yield
+      if response.success? ||
+          response.status != 401 ||
+          ## Here can be another error, like "missing required oauth scope"
+          response.body[:message] != 'invalid oauth token'
+        return response
+      end
+
+      @tokens = @oauth2_client.refreshed_tokens(refresh_token: refresh_token)
+      renew_authorization_header
+      yield
     end
   end
 end
